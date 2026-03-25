@@ -48,4 +48,13 @@ Pionex API overview: [Pionex API Docs](https://pionex-doc.gitbook.io/apidocs/) â
   pionex-ai-kit onboard
   ```
 
+## Updates
+
+- Update skills (re-run the same command):
+  ```bash
+  npx skills add pionex-official/pionex-skills
+  ```
+
+See `CHANGELOG.md` for a detailed change history.
+
 

@@ -42,6 +42,7 @@ Security: [Pionex API Docs](https://pionex-doc.gitbook.io/apidocs/) recommend IP
 - Market data (price, depth, klines, symbol info) → **pionex-market**
 - Account balance → **pionex-portfolio** (or use `pionex-trade-cli account balance` here when checking before order)
 - Place/cancel orders, open orders, fills → **pionex-trade** (this skill)
+- Futures grid bot lifecycle (create/adjust/reduce/cancel) → **pionex-bot**
 
 ## Command Index (orders & account used by this skill)
 

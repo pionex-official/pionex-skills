@@ -43,6 +43,7 @@ API reference: [Pionex API Docs](https://pionex-doc.gitbook.io/apidocs/).
 - For market data (depth, tickers, symbols, klines, trades) → use **pionex-market** (this skill).
 - For account balance → use **pionex-portfolio**.
 - For placing/cancelling orders → use **pionex-trade**.
+- For futures grid bot lifecycle → use **pionex-bot**.
 
 ## Quickstart
 

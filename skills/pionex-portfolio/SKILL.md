@@ -45,6 +45,7 @@ pionex-ai-kit onboard
 - Balance / account → **pionex-portfolio** (this skill)
 - Market data → **pionex-market**
 - Orders (place/cancel) → **pionex-trade**
+- Futures grid bot lifecycle → **pionex-bot**
 
 ## Example
 

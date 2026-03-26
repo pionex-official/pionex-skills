@@ -16,4 +16,5 @@
 - 更新 `pionex-bot` 技能中的 Futures Grid 指引，使其符合更严格的 `adjust_params` / 工具命名规则：
   - 移除/规避对 `openPrice` / `keyId` 的引用
   - 指引对齐 `pionex_bot_futures_grid_adjust_params` 与 `pionex_bot_futures_grid_reduce`
+- 更新 `pionex-bot` 的 CLI 示例为 `pionex-trade-cli bot futures_grid <command>`（为后续更多机器人类型预留层级）。
 

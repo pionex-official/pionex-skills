@@ -35,11 +35,11 @@ Use this skill for Pionex Futures Grid Bot lifecycle actions: get, create, adjus
 
 | Command | Type | Description |
 |---------|------|-------------|
-| `pionex-trade-cli bot get --bu-order-id <id>` | READ | Query one futures grid bot order |
-| `pionex-trade-cli bot create --base BTC --quote USDT --bu-order-data-json '<json>' [--dry-run]` | WRITE | Create futures grid bot |
-| `pionex-trade-cli bot adjust_params --body-json '<json>' [--dry-run]` | WRITE | Add investment / modify range / trigger invest-in |
-| `pionex-trade-cli bot reduce --body-json '<json>' [--dry-run]` | WRITE | Reduce bot position |
-| `pionex-trade-cli bot cancel --bu-order-id <id> [--close-sell-model TO_QUOTE\\|TO_USDT] [--dry-run]` | WRITE | Cancel and close bot |
+| `pionex-trade-cli bot futures_grid get --bu-order-id <id>` | READ | Query one futures grid bot order |
+| `pionex-trade-cli bot futures_grid create --base BTC --quote USDT --bu-order-data-json '<json>' [--dry-run]` | WRITE | Create futures grid bot |
+| `pionex-trade-cli bot futures_grid adjust_params --body-json '<json>' [--dry-run]` | WRITE | Add investment / modify range / trigger invest-in |
+| `pionex-trade-cli bot futures_grid reduce --body-json '<json>' [--dry-run]` | WRITE | Reduce bot position |
+| `pionex-trade-cli bot futures_grid cancel --bu-order-id <id> [--close-sell-model TO_QUOTE\\|TO_USDT] [--dry-run]` | WRITE | Cancel and close bot |
 
 ## Safety Rules
 
@@ -51,15 +51,15 @@ Use this skill for Pionex Futures Grid Bot lifecycle actions: get, create, adjus
 
 ```bash
 # Read bot status
-pionex-trade-cli bot get --bu-order-id 123456789
+pionex-trade-cli bot futures_grid get --bu-order-id 123456789
 
 # Dry-run create
-pionex-trade-cli bot create \
+pionex-trade-cli bot futures_grid create \
   --base BTC \
   --quote USDT \
   --bu-order-data-json '{"top":"110000","bottom":"90000","row":100,"grid_type":"arithmetic","trend":"long","leverage":5,"extraMargin":"0","quoteInvestment":"100"}' \
   --dry-run
 
 # Dry-run adjust
-pionex-trade-cli bot adjust_params --body-json '{"buOrderId":"123456789","type":"invest_in","quoteInvestment":50,"extraMargin":false}' --dry-run
+pionex-trade-cli bot futures_grid adjust_params --body-json '{"buOrderId":"123456789","type":"invest_in","quoteInvestment":50,"extraMargin":false}' --dry-run
 ```

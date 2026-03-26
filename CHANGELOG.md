@@ -17,4 +17,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - removed/avoided `openPrice` / `keyId` references
   - aligned instructions to `pionex_bot_futures_grid_adjust_params` and `pionex_bot_futures_grid_reduce`
 - Updated `pionex-bot` CLI examples to use `pionex-trade-cli bot futures_grid <command>` (nested route for future bot types).
+- Updated `pionex-market` / `pionex-trade` command references for new methods: `market book-tickers` and `orders fills-by-order-id`.
 

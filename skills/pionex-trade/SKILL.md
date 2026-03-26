@@ -54,6 +54,7 @@ Security: [Pionex API Docs](https://pionex-doc.gitbook.io/apidocs/) recommend IP
 | `pionex-trade-cli orders open --symbol <s>` | READ | List open orders for symbol |
 | `pionex-trade-cli orders all --symbol <s> [--limit <n>]` | READ | Order history (filled/cancelled) |
 | `pionex-trade-cli orders fills --symbol <s> [--startTime] [--endTime]` | READ | Fills (executed trades) |
+| `pionex-trade-cli orders fills-by-order-id --symbol <s> --order-id <id>` | READ | Fills for one specific order |
 | `pionex-trade-cli orders cancel --symbol <s> --order-id <id> [--dry-run]` | WRITE | Cancel one order |
 | `pionex-trade-cli orders cancel-all --symbol <s> [--dry-run]` | WRITE | Cancel all open orders for symbol |
 

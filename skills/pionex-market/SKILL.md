@@ -61,6 +61,10 @@ pionex-trade-cli market symbols --symbols BTC_USDT
 pionex-trade-cli market tickers --symbol BTC_USDT
 pionex-trade-cli market tickers --type SPOT
 
+# Best bid/ask ticker(s)
+pionex-trade-cli market book-tickers --symbol BTC_USDT
+pionex-trade-cli market book-tickers --type PERP
+
 # OHLCV klines (candlestick)
 pionex-trade-cli market klines BTC_USDT 60M --limit 24
 pionex-trade-cli market klines BTC_USDT 1D
@@ -74,7 +78,8 @@ pionex-trade-cli market klines BTC_USDT 1D
 | 2 | `pionex-trade-cli market trades <symbol> [--limit <n>]` | READ | Recent public trades; limit 1–100 |
 | 3 | `pionex-trade-cli market symbols [--symbols <list>] [--type SPOT\|PERP]` | READ | Symbol metadata (precision, min size). Comma-separated symbols or type filter |
 | 4 | `pionex-trade-cli market tickers [--symbol <s>] [--type SPOT\|PERP]` | READ | 24h ticker(s): open, close, high, low, volume |
-| 5 | `pionex-trade-cli market klines <symbol> <interval> [--endTime <ms>] [--limit <n>]` | READ | OHLCV klines. interval: 1M, 5M, 15M, 30M, 60M, 4H, 8H, 12H, 1D |
+| 5 | `pionex-trade-cli market book-tickers [--symbol <s>] [--type SPOT\|PERP]` | READ | Best bid/ask ticker(s) for one symbol or all symbols by type |
+| 6 | `pionex-trade-cli market klines <symbol> <interval> [--endTime <ms>] [--limit <n>]` | READ | OHLCV klines. interval: 1M, 5M, 15M, 30M, 60M, 4H, 8H, 12H, 1D |
 
 ## Cross-Skill: Check price/symbol before order
 

@@ -17,4 +17,5 @@
   - 移除/规避对 `openPrice` / `keyId` 的引用
   - 指引对齐 `pionex_bot_futures_grid_adjust_params` 与 `pionex_bot_futures_grid_reduce`
 - 更新 `pionex-bot` 的 CLI 示例为 `pionex-trade-cli bot futures_grid <command>`（为后续更多机器人类型预留层级）。
+- 更新 `pionex-market` / `pionex-trade` 的命令引用，补充新方法：`market book-tickers` 与 `orders fills-by-order-id`。
 

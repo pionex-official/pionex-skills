@@ -1,0 +1,118 @@
+openapi: "3.1.0"
+info:
+  title: Pionex Skills — CLI Interface
+  description: >
+    This project is a skills repository (Markdown behavioral playbooks), not an HTTP service.
+    There are no HTTP API endpoints, gRPC services, or Kubernetes/Helm charts in this repository.
+
+    The "API" exposed to AI agents is the pionex-trade-cli CLI interface, documented below
+    as a non-standard x-cli-interface extension for reference.
+  version: "0.1.0"
+
+servers: []
+
+paths: {}
+
+x-cli-interface:
+  binary: pionex-trade-cli
+  install: "npm install -g @pionex/pionex-ai-kit"
+  credentials: "~/.pionex/config.toml (via: pionex-ai-kit onboard)"
+
+  subcommands:
+    market:
+      auth_required: false
+      commands:
+        - name: "market depth <symbol>"
+          flags: ["--limit <n>"]
+          description: "Order book depth (bids/asks). limit 1-100, default 5."
+        - name: "market trades <symbol>"
+          flags: ["--limit <n>"]
+          description: "Recent public trades."
+        - name: "market symbols"
+          flags: ["--symbols <csv>", "--type SPOT|PERP"]
+          description: "Symbol metadata: precision, min size, filter rules."
+        - name: "market tickers"
+          flags: ["--symbol <s>", "--type SPOT|PERP"]
+          description: "24h price ticker(s)."
+        - name: "market book-tickers"
+          flags: ["--symbol <s>", "--type SPOT|PERP"]
+          description: "Best bid/ask ticker(s)."
+        - name: "market klines <symbol> <interval>"
+          flags: ["--endTime <ms>", "--limit <n>"]
+          description: "OHLCV candlestick data. Intervals: 1M 5M 15M 30M 60M 4H 8H 12H 1D."
+
+    account:
+      auth_required: true
+      commands:
+        - name: "account balance"
+          description: "All spot balances. Returns JSON array; filter by currency client-side."
+
+    orders:
+      auth_required: true
+      commands:
+        - name: "orders new"
+          flags:
+            - "--symbol <s> (required)"
+            - "--side BUY|SELL (required)"
+            - "--type MARKET|LIMIT (required)"
+            - "--amount <quote>  # MARKET BUY only"
+            - "--size <base>     # MARKET SELL / LIMIT"
+            - "--price <p>       # LIMIT only"
+            - "--dry-run"
+          description: "Place a spot order."
+          mutating: true
+        - name: "orders get"
+          flags: ["--symbol <s>", "--order-id <id>"]
+          description: "Get one order by ID."
+        - name: "orders open"
+          flags: ["--symbol <s>"]
+          description: "List open orders for symbol."
+        - name: "orders all"
+          flags: ["--symbol <s>", "--limit <n>"]
+          description: "Order history (filled/cancelled)."
+        - name: "orders fills"
+          flags: ["--symbol <s>", "--startTime <ms>", "--endTime <ms>"]
+          description: "Executed trade fills."
+        - name: "orders fills-by-order-id"
+          flags: ["--symbol <s>", "--order-id <id>"]
+          description: "Fills for one specific order."
+        - name: "orders cancel"
+          flags: ["--symbol <s>", "--order-id <id>", "--dry-run"]
+          description: "Cancel a single order."
+          mutating: true
+        - name: "orders cancel-all"
+          flags: ["--symbol <s>", "--dry-run"]
+          description: "Cancel all open orders for symbol. Always preview with orders open first."
+          mutating: true
+
+    bot:
+      auth_required: true
+      commands:
+        - name: "bot futures_grid get"
+          flags: ["--bu-order-id <id>"]
+          description: "Query one futures grid bot order."
+        - name: "bot futures_grid create"
+          flags:
+            - "--base <currency>"
+            - "--quote <currency>"
+            - "--bu-order-data-json '<json>'"
+            - "--dry-run"
+          description: >
+            Create a futures grid bot. JSON fields: top, bottom, row, grid_type (arithmetic|geometric),
+            trend (long|short|neutral), leverage, quoteInvestment, extraMargin.
+          mutating: true
+        - name: "bot futures_grid adjust_params"
+          flags: ["--body-json '<json>'", "--dry-run"]
+          description: "Add investment / modify range / trigger invest-in."
+          mutating: true
+        - name: "bot futures_grid reduce"
+          flags: ["--body-json '<json>'", "--dry-run"]
+          description: "Reduce bot position."
+          mutating: true
+        - name: "bot futures_grid cancel"
+          flags:
+            - "--bu-order-id <id>"
+            - "--close-sell-model TO_QUOTE|TO_USDT"
+            - "--dry-run"
+          description: "Cancel and close bot."
+          mutating: true

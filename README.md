@@ -30,6 +30,7 @@ are enforced for order placement, balance checks, and minimum order sizes.
 | [pionex-portfolio](skills/pionex-portfolio/SKILL.md) | Account balance (spot) | Yes |
 | [pionex-trade](skills/pionex-trade/SKILL.md) | Spot orders: place, cancel, open orders, fills | Yes |
 | [pionex-bot](skills/pionex-bot/SKILL.md) | Futures Grid Bot lifecycle: get/create/adjust/reduce/cancel | Yes |
+| [pionex-earn-dual](skills/pionex-earn-dual/SKILL.md) | Dual Investment: products, prices, invest, revoke, collect | No (public) / Yes (private) |
 
 All skills assume the `pionex-trade-cli` CLI is installed (`npm install -g @pionex/pionex-ai-kit`).  
 Pionex API overview: [Pionex API Docs](https://pionex-doc.gitbook.io/apidocs/) — use IP whitelisting and never share your API Key/Secret.

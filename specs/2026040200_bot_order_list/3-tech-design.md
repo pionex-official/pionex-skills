@@ -31,7 +31,7 @@ description: >
 ### 3. Commands table — add new row
 
 ```markdown
-| `pionex-trade-cli bot order_list [--status running|canceled] [--base BTC] [--quote USDT] [--page-token <token>] [--bu-order-types futures_grid,spot_grid,smart_copy]` | READ | List bot orders with optional filters and pagination |
+| `pionex-trade-cli bot order_list [--status running|finished] [--base BTC] [--quote USDT] [--page-token <token>] [--bu-order-types futures_grid,spot_grid,smart_copy]` | READ | List bot orders with optional filters and pagination |
 ```
 
 ### 4. New example
@@ -40,8 +40,8 @@ description: >
 # List running futures grid bot orders
 pionex-trade-cli bot order_list --status running --bu-order-types futures_grid
 
-# Paginate through canceled orders
-pionex-trade-cli bot order_list --status canceled --page-token <nextPageToken>
+# Paginate through finished orders
+pionex-trade-cli bot order_list --status finished --page-token <nextPageToken>
 
 # Filter by symbol
 pionex-trade-cli bot order_list --base BTC --quote USDT

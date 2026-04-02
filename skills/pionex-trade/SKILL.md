@@ -54,9 +54,9 @@ Security: [Pionex API Docs](https://pionex-doc.gitbook.io/apidocs/) recommend IP
 | `pionex-trade-cli orders open --symbol <s>` | READ | List open orders for symbol |
 | `pionex-trade-cli orders all --symbol <s> [--limit <n>]` | READ | Order history (filled/cancelled) |
 | `pionex-trade-cli orders fills --symbol <s> [--startTime] [--endTime]` | READ | Fills (executed trades) |
-| `pionex-trade-cli orders fills-by-order-id --symbol <s> --order-id <id>` | READ | Fills for one specific order |
+| `pionex-trade-cli orders fills_by_order_id --symbol <s> --order-id <id>` | READ | Fills for one specific order |
 | `pionex-trade-cli orders cancel --symbol <s> --order-id <id> [--dry-run]` | WRITE | Cancel one order |
-| `pionex-trade-cli orders cancel-all --symbol <s> [--dry-run]` | WRITE | Cancel all open orders for symbol |
+| `pionex-trade-cli orders cancel_all --symbol <s> [--dry-run]` | WRITE | Cancel all open orders for symbol |
 
 Symbol info (min size, precision) before placing orders: use **pionex-market** → `pionex-trade-cli market symbols --symbols BTC_USDT`.
 
@@ -77,7 +77,7 @@ Do **not** use for: only checking prices or order book (use pionex-market); only
 ## 2. General rules
 
 1. **Explicit parameters** — Do not guess symbol, side, or size. If unclear, ask the user for: symbol (e.g. `BTC_USDT`), side (BUY/SELL), type (MARKET/LIMIT), and amount or size.
-2. **Prefer dry-run then confirm** — For any write (new order, cancel, cancel-all), run with `--dry-run` first when supported, show the user what would be done, then ask for confirmation before running without `--dry-run`.
+2. **Prefer dry-run then confirm** — For any write (new order, cancel, cancel_all), run with `--dry-run` first when supported, show the user what would be done, then ask for confirmation before running without `--dry-run`.
 3. **Do not increase risk without telling the user** — No larger size, no extra orders, without explicit user agreement.
 4. **On errors** — Explain and suggest next steps (e.g. adjust size to min, or check balance).
 
@@ -135,14 +135,14 @@ If the API returns an error about minimum order size or notional (e.g. minimum n
   `pionex-trade-cli orders cancel --symbol BTC_USDT --order-id 123456`
 
 - **Cancel all for symbol**  
-  `pionex-trade-cli orders cancel-all --symbol BTC_USDT`  
+  `pionex-trade-cli orders cancel_all --symbol BTC_USDT`  
   Before running, list what will be cancelled: `pionex-trade-cli orders open --symbol BTC_USDT`, then confirm with the user.
 
 ---
 
-## 6. Cancel-all and batch actions
+## 6. Cancel_all and batch actions
 
-- **Always preview** — Before `pionex-trade-cli orders cancel-all --symbol <s>`, run `pionex-trade-cli orders open --symbol <s>` and show the user how many orders and for which symbol.
+- **Always preview** — Before `pionex-trade-cli orders cancel_all --symbol <s>`, run `pionex-trade-cli orders open --symbol <s>` and show the user how many orders and for which symbol.
 - **Explicit confirmation** — e.g. “This will cancel 3 open orders on BTC_USDT. Confirm?” Only then run without `--dry-run` if applicable.
 
 ---

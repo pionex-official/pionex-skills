@@ -18,7 +18,7 @@ This document summarizes the requirement history and current status of the Pione
 - ✅ `market trades <symbol>` — Recent public trades
 - ✅ `market symbols` — Symbol metadata (precision, min size, filter rules)
 - ✅ `market tickers` — 24h price ticker(s)
-- ✅ `market book-tickers` — Best bid/ask ticker(s)
+- ✅ `market book_tickers` — Best bid/ask ticker(s)
 - ✅ `market klines <symbol> <interval>` — OHLCV candlestick data
 
 #### Skill: pionex-portfolio
@@ -36,9 +36,9 @@ This document summarizes the requirement history and current status of the Pione
 - ✅ `orders open` — List open orders for a symbol
 - ✅ `orders all` — Order history (filled/cancelled)
 - ✅ `orders fills` — Executed trade fills
-- ✅ `orders fills-by-order-id` — Fills for one specific order
+- ✅ `orders fills_by_order_id` — Fills for one specific order
 - ✅ `orders cancel` — Cancel a single order
-- ✅ `orders cancel-all` — Cancel all open orders for a symbol
+- ✅ `orders cancel_all` — Cancel all open orders for a symbol
 
 #### Skill: pionex-bot
 **Status:** Completed  

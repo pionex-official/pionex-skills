@@ -4,7 +4,7 @@ This document describes the detailed technical design of the Pionex Skills proje
 
 ## Last Updated
 
-**Date:** 2026-04-01 (updated by iteration `2026040100_earn_dual`)
+**Date:** 2026-04-02 (updated by iteration `2026040200_bot_order_list`)
 
 ## Skill File Structure
 
@@ -83,7 +83,16 @@ Market/LIMIT order distinction:
 
 ### pionex-bot
 
-Uses nested command structure: `pionex-trade-cli bot futures_grid <subcommand>`
+Two command structures coexist:
+
+| Structure | Scope |
+|---|---|
+| `pionex-trade-cli bot order_list [flags]` | Cross-type listing — spans futures_grid, spot_grid, smart_copy |
+| `pionex-trade-cli bot futures_grid <subcommand>` | Type-specific lifecycle — create/get/adjust/reduce/cancel |
+
+`order_list` is top-level under `bot` because it is not tied to a single bot type. It supports pagination via `--page-token` and filtering by `--bu-order-types` (comma-separated: `futures_grid`, `spot_grid`, `smart_copy`). No `--dry-run` needed — read-only GET.
+
+Uses nested command structure for lifecycle: `pionex-trade-cli bot futures_grid <subcommand>`
 
 `create` requires a JSON blob (`--bu-order-data-json`). Key fields:
 - `top`, `bottom` — price range

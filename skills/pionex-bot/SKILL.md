@@ -1,14 +1,15 @@
 ---
 name: pionex-bot
 description: >
-  Use when the user asks to create, query, adjust, reduce, or cancel Pionex
-  Futures Grid Bot orders. Requires API credentials and bot permissions.
+  Use when the user asks to create, query, list, adjust, reduce, or cancel Pionex
+  bot orders (Futures Grid, Spot Grid, Smart Copy). Includes listing/paginating
+  through bot orders in bulk. Requires API credentials and bot permissions.
   Do NOT use for market data only (pionex-market), balance only (pionex-portfolio),
   or spot order placement/cancel (pionex-trade).
 license: MIT
 metadata:
   author: pionex
-  version: "0.1.0"
+  version: "0.2.0"
   agent:
     requires:
       bins: ["pionex-trade-cli"]
@@ -35,6 +36,7 @@ Use this skill for Pionex Futures Grid Bot lifecycle actions: get, create, adjus
 
 | Command | Type | Description |
 |---------|------|-------------|
+| `pionex-trade-cli bot order_list [--status running\|canceled] [--base BTC] [--quote USDT] [--page-token <token>] [--bu-order-types futures_grid,spot_grid,smart_copy]` | READ | List bot orders with optional filters and pagination |
 | `pionex-trade-cli bot futures_grid get --bu-order-id <id>` | READ | Query one futures grid bot order |
 | `pionex-trade-cli bot futures_grid create --base BTC --quote USDT --bu-order-data-json '<json>' [--dry-run]` | WRITE | Create futures grid bot |
 | `pionex-trade-cli bot futures_grid adjust_params --body-json '<json>' [--dry-run]` | WRITE | Add investment / modify range / trigger invest-in |
@@ -50,7 +52,19 @@ Use this skill for Pionex Futures Grid Bot lifecycle actions: get, create, adjus
 ## Examples
 
 ```bash
-# Read bot status
+# List running futures grid bot orders
+pionex-trade-cli bot order_list --status running --bu-order-types futures_grid
+
+# List all running bot orders across all types
+pionex-trade-cli bot order_list --status running
+
+# Filter by symbol
+pionex-trade-cli bot order_list --base BTC --quote USDT
+
+# Paginate to next page
+pionex-trade-cli bot order_list --status canceled --page-token <nextPageToken>
+
+# Read one bot status
 pionex-trade-cli bot futures_grid get --bu-order-id 123456789
 
 # Dry-run create

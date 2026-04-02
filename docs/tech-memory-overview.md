@@ -4,7 +4,7 @@ This document records key decisions, lessons learned, and non-obvious technical 
 
 ## Last Updated
 
-**Date:** 2026-04-01
+**Date:** 2026-04-02
 
 ---
 
@@ -66,3 +66,27 @@ The CLI commands (`pionex-trade-cli earn dual *`) do not yet exist in `pionex-ai
 The API uses `clientDualId` as an idempotency key for invest operations. The skill enforces that the agent never infers or auto-generates this value without user confirmation.
 
 _Future iterations should append new entries here with date and context._
+
+---
+
+## Iteration: 2026040200_bot_order_list (2026-04-02)
+
+**Added:** `bot order_list` command to `skills/pionex-bot/SKILL.md`
+
+### Key Decisions
+
+**1. `bot order_list` is top-level, not under `bot futures_grid`**
+
+The CLI route is `pionex-trade-cli bot order_list`, not `bot futures_grid list`. This is intentional because `order_list` spans multiple bot types (futures_grid, spot_grid, smart_copy) and does not belong under a type-specific subgroup.
+
+**2. `buOrderTypes` serialized as comma-separated string**
+
+`URLSearchParams.set()` only handles one value per key. The CLI flag `--bu-order-types` accepts a comma-separated string (e.g. `futures_grid,spot_grid`) which is forwarded as-is to the API. When omitted, all bot types are returned.
+
+**3. Read-only — no `--dry-run` needed**
+
+`GET /api/v1/bot/orders` is read-only. No dry-run guard is required or appropriate.
+
+**4. pionex-bot skill version bumped to 0.2.0**
+
+Adding a new command (minor change) warrants a minor version bump per the versioning policy in `tech-design-overview.md`.

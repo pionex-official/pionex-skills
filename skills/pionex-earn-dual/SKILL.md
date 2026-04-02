@@ -45,13 +45,13 @@ Dual Investment products on Pionex: browse products, check yields, invest, revok
    ```bash
    npm install -g @pionex/pionex-ai-kit
    ```
-2. For private commands (balances, invest, revoke-invest, collect), configure credentials:
+2. For private commands (balances, invest, revoke_invest, collect), configure credentials:
    ```bash
    pionex-ai-kit onboard
    ```
    Ensure your API key has the required permissions:
-   - **View** — for `balances`, `get-invests`, `records`
-   - **Earn** — for `invest`, `revoke-invest`, `collect`
+   - **View** — for `balances`, `get_invests`, `records`
+   - **Earn** — for `invest`, `revoke_invest`, `collect`
 3. Verify (public, no auth needed):
    ```bash
    pionex-trade-cli earn dual symbols
@@ -66,17 +66,17 @@ Dual Investment products on Pionex: browse products, check yields, invest, revok
 | # | Command | Flags | Type |
 |---|---------|-------|------|
 | 1 | `pionex-trade-cli earn dual symbols` | `[--base <currency>]` | READ |
-| 2 | `pionex-trade-cli earn dual open-products` | `--base <c> --quote <c> --type DUAL_BASE\|DUAL_CURRENCY [--currency <c>]` | READ |
+| 2 | `pionex-trade-cli earn dual open_products` | `--base <c> --quote <c> --type DUAL_BASE\|DUAL_CURRENCY [--currency <c>]` | READ |
 | 3 | `pionex-trade-cli earn dual prices` | `--base <c> --quote <c> --product-ids <id1,id2,...>` | READ |
 | 4 | `pionex-trade-cli earn dual index` | `--base <c> --quote <c>` | READ |
-| 5 | `pionex-trade-cli earn dual delivery-prices` | `--base <c> [--quote <c>] [--start-time <ms>] [--end-time <ms>]` | READ |
+| 5 | `pionex-trade-cli earn dual delivery_prices` | `--base <c> [--quote <c>] [--start-time <ms>] [--end-time <ms>]` | READ |
 
 ### Private Commands — View permission
 
 | # | Command | Flags | Type |
 |---|---------|-------|------|
 | 6 | `pionex-trade-cli earn dual balances` | `[--merge]` | READ |
-| 7 | `pionex-trade-cli earn dual get-invests` | `[--base <c>] --client-dual-ids <id1,id2,...>` | READ |
+| 7 | `pionex-trade-cli earn dual get_invests` | `[--base <c>] --client-dual-ids <id1,id2,...>` | READ |
 | 8 | `pionex-trade-cli earn dual records` | `--base <c> --end-time <ms> [--quote <c>] [--currency <c>] [--start-time <ms>] [--limit <n>]` | READ |
 
 ### Private Commands — Earn permission
@@ -84,7 +84,7 @@ Dual Investment products on Pionex: browse products, check yields, invest, revok
 | # | Command | Flags | Type |
 |---|---------|-------|------|
 | 9 | `pionex-trade-cli earn dual invest` | `--base <c> --product-id <id> --profit <rate> (--base-amount <n> \| --currency-amount <n>) [--client-dual-id <id>] [--dry-run]` | WRITE |
-| 10 | `pionex-trade-cli earn dual revoke-invest` | `--base <c> --product-id <id> --client-dual-id <id> [--dry-run]` | WRITE |
+| 10 | `pionex-trade-cli earn dual revoke_invest` | `--base <c> --product-id <id> --client-dual-id <id> [--dry-run]` | WRITE |
 | 11 | `pionex-trade-cli earn dual collect` | `--base <c> --client-dual-id <id> --product-id <id> [--dry-run]` | WRITE |
 
 ---
@@ -116,10 +116,10 @@ The correct `--quote` value depends on the base currency:
 1. **Never use a stale `profit` value** — Always call `earn dual prices` immediately before `earn dual invest`. The API rejects mismatched profit values. Steps 2 and 3 of the invest workflow must be consecutive.
 2. **`--profit` is required for `invest`** — There is no default; the exact value returned by `prices` must be passed.
 3. **Never provide both `--base-amount` and `--currency-amount`** — They are mutually exclusive; use one or the other.
-4. **Dry-run first, confirm before real execution** — For `invest`, `revoke-invest`, and `collect`, always run with `--dry-run`, show output to user, then confirm before running without it.
+4. **Dry-run first, confirm before real execution** — For `invest`, `revoke_invest`, and `collect`, always run with `--dry-run`, show output to user, then confirm before running without it.
 5. **Never infer `--client-dual-id`** — Require the user to provide it, or propose one and get confirmation. It acts as an idempotency key.
-6. **Check order state before revoke/collect** — Use `earn dual get-invests` to verify state first: `revoke-invest` only works on pending orders; `collect` only works on settled orders.
-7. **Never infer `--product-id`, strike, or expiry** — These must come from the API (`open-products` or `get-invests`), never assumed.
+6. **Check order state before revoke/collect** — Use `earn dual get_invests` to verify state first: `revoke_invest` only works on pending orders; `collect` only works on settled orders.
+7. **Never infer `--product-id`, strike, or expiry** — These must come from the API (`open_products` or `get_invests`), never assumed.
 
 ---
 
@@ -129,14 +129,14 @@ The correct `--quote` value depends on the base currency:
 
 ```bash
 # DUAL_BASE: invest in BTC, payout converted if price rises above strike
-pionex-trade-cli earn dual open-products \
+pionex-trade-cli earn dual open_products \
   --base BTC \
   --quote USDXO \
   --type DUAL_BASE \
   --currency USDT
 
 # DUAL_CURRENCY: invest in USDT, buy BTC if price drops below strike
-pionex-trade-cli earn dual open-products \
+pionex-trade-cli earn dual open_products \
   --base BTC \
   --quote USDXO \
   --type DUAL_CURRENCY \
@@ -193,11 +193,11 @@ pionex-trade-cli earn dual symbols
 pionex-trade-cli earn dual symbols --base BTC
 
 # Open DUAL_BASE products for ETH (invest ETH, convert to USDT if price rises)
-pionex-trade-cli earn dual open-products \
+pionex-trade-cli earn dual open_products \
   --base ETH --quote USDXO --type DUAL_BASE --currency USDT
 
 # Open products for XRP (non-BTC/ETH — use USDT quote)
-pionex-trade-cli earn dual open-products \
+pionex-trade-cli earn dual open_products \
   --base XRP --quote USDT --type DUAL_BASE
 ```
 
@@ -218,7 +218,7 @@ pionex-trade-cli earn dual prices \
 pionex-trade-cli earn dual index --base BTC --quote USDXO
 
 # Historical delivery prices
-pionex-trade-cli earn dual delivery-prices --base BTC --quote USDXO
+pionex-trade-cli earn dual delivery_prices --base BTC --quote USDXO
 ```
 
 ### Account and history
@@ -231,7 +231,7 @@ pionex-trade-cli earn dual balances
 pionex-trade-cli earn dual balances --merge
 
 # Batch query by client order IDs (comma-separated)
-pionex-trade-cli earn dual get-invests \
+pionex-trade-cli earn dual get_invests \
   --base BTC \
   --client-dual-ids my-order-001,my-order-002
 
@@ -247,17 +247,17 @@ pionex-trade-cli earn dual records \
 
 ```bash
 # 1. Verify order is still pending
-pionex-trade-cli earn dual get-invests --base BTC --client-dual-ids my-order-001
+pionex-trade-cli earn dual get_invests --base BTC --client-dual-ids my-order-001
 
 # 2. Dry-run
-pionex-trade-cli earn dual revoke-invest \
+pionex-trade-cli earn dual revoke_invest \
   --base BTC \
   --product-id BTC-USDXO-260402-68000-P-USDT \
   --client-dual-id my-order-001 \
   --dry-run
 
 # 3. Execute after user confirmation
-pionex-trade-cli earn dual revoke-invest \
+pionex-trade-cli earn dual revoke_invest \
   --base BTC \
   --product-id BTC-USDXO-260402-68000-P-USDT \
   --client-dual-id my-order-001
@@ -267,7 +267,7 @@ pionex-trade-cli earn dual revoke-invest \
 
 ```bash
 # 1. Verify order is settled
-pionex-trade-cli earn dual get-invests --base BTC --client-dual-ids my-order-001
+pionex-trade-cli earn dual get_invests --base BTC --client-dual-ids my-order-001
 
 # 2. Dry-run
 pionex-trade-cli earn dual collect \

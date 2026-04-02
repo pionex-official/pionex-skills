@@ -108,7 +108,7 @@ Command namespace: `earn dual <subcommand>` — mirrors the API path `/api/v1/ea
 | All others | `USDT` | `USDT` |
 
 **Mandatory invest workflow:**
-1. `earn dual open-products` → get `productId`
+1. `earn dual open_products` → get `productId`
 2. `earn dual prices` → get fresh `profit` value (immediately before step 3)
 3. `earn dual invest --profit <value-from-step-2>` → execute
 

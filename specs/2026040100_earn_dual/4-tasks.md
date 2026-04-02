@@ -16,8 +16,8 @@
    - Command Index table (all 11 commands, READ/WRITE types)
    - quote/currency rules table (BTC/ETH → USDXO vs others → USDT)
    - Safety Rules section (5 rules)
-   - Invest Workflow section (3-step: open-products → prices → invest)
-   - Examples section (at least: open-products, prices, invest with --dry-run, revoke with --dry-run, collect with --dry-run)
+   - Invest Workflow section (3-step: open_products → prices → invest)
+   - Examples section (at least: open_products, prices, invest with --dry-run, revoke with --dry-run, collect with --dry-run)
 
 **Verify:** File exists, frontmatter parses as valid YAML, all commands present.
 

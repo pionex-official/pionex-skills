@@ -31,17 +31,17 @@ The corresponding CLI commands in `pionex-ai-kit` also need to be implemented (t
 | Command | API Endpoint | Description |
 |---------|-------------|-------------|
 | `earn dual symbols` | `GET /api/v1/earn/dual/symbols` | List supported trading pairs with min/max investment amounts |
-| `earn dual open-products` | `GET /api/v1/earn/dual/openProducts` | List currently open products for a pair and type (DUAL_BASE / DUAL_CURRENCY) |
+| `earn dual open_products` | `GET /api/v1/earn/dual/openProducts` | List currently open products for a pair and type (DUAL_BASE / DUAL_CURRENCY) |
 | `earn dual prices` | `GET /api/v1/earn/dual/prices` | Get latest yield rate (profit) and investability for specific product IDs |
 | `earn dual index` | `GET /api/v1/earn/dual/index` | Get real-time index price for a pair |
-| `earn dual delivery-prices` | `GET /api/v1/earn/dual/deliveryPrices` | Historical settlement delivery prices |
+| `earn dual delivery_prices` | `GET /api/v1/earn/dual/deliveryPrices` | Historical settlement delivery prices |
 
 ### Private Commands (View permission)
 
 | Command | API Endpoint | Description |
 |---------|-------------|-------------|
 | `earn dual balances` | `GET /api/v1/earn/dual/balances` | User's dual investment account balances |
-| `earn dual get-invests` | `POST /api/v1/earn/dual/invests` | Batch query investment orders by clientDualId list |
+| `earn dual get_invests` | `POST /api/v1/earn/dual/invests` | Batch query investment orders by clientDualId list |
 | `earn dual records` | `GET /api/v1/earn/dual/records` | Paginated investment history |
 
 ### Private Commands (Earn permission)
@@ -49,7 +49,7 @@ The corresponding CLI commands in `pionex-ai-kit` also need to be implemented (t
 | Command | API Endpoint | Description |
 |---------|-------------|-------------|
 | `earn dual invest` | `POST /api/v1/earn/dual/invest` | Create a new investment order |
-| `earn dual revoke-invest` | `DELETE /api/v1/earn/dual/invest` | Revoke a pending investment order |
+| `earn dual revoke_invest` | `DELETE /api/v1/earn/dual/invest` | Revoke a pending investment order |
 | `earn dual collect` | `POST /api/v1/earn/dual/collect` | Collect settled earnings into spot account |
 
 ## Key Business Rules

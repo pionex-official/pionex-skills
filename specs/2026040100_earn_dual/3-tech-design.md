@@ -53,20 +53,20 @@ All commands follow the pattern `pionex-trade-cli earn dual <subcommand> [flags]
 | Command | Flags | Type |
 |---------|-------|------|
 | `earn dual symbols` | `[--base <currency>]` | READ |
-| `earn dual open-products` | `--base <c> --quote <c> --type DUAL_BASE\|DUAL_CURRENCY [--currency <c>]` | READ |
+| `earn dual open_products` | `--base <c> --quote <c> --type DUAL_BASE\|DUAL_CURRENCY [--currency <c>]` | READ |
 | `earn dual prices` | `--base <c> --quote <c> --product-ids <csv>` | READ |
 | `earn dual index` | `--base <c> --quote <c>` | READ |
-| `earn dual delivery-prices` | `--base <c> [--quote <c>] [--startTime <ms>] [--endTime <ms>]` | READ |
+| `earn dual delivery_prices` | `--base <c> [--quote <c>] [--startTime <ms>] [--endTime <ms>]` | READ |
 
 **Private:**
 
 | Command | Flags | Type | Permission |
 |---------|-------|------|-----------|
 | `earn dual balances` | `[--merge]` | READ | View |
-| `earn dual get-invests` | `[--base <c>] --client-dual-ids <id1,id2,...>` | READ | View |
+| `earn dual get_invests` | `[--base <c>] --client-dual-ids <id1,id2,...>` | READ | View |
 | `earn dual records` | `--base <c> --end-time <ms> [--quote <c>] [--currency <c>] [--start-time <ms>] [--limit <n>]` | READ | View |
 | `earn dual invest` | `--base <c> --product-id <id> --profit <rate> (--base-amount <n> \| --currency-amount <n>) [--client-dual-id <id>] [--dry-run]` | WRITE | Earn |
-| `earn dual revoke-invest` | `--base <c> --product-id <id> --client-dual-id <id> [--dry-run]` | WRITE | Earn |
+| `earn dual revoke_invest` | `--base <c> --product-id <id> --client-dual-id <id> [--dry-run]` | WRITE | Earn |
 | `earn dual collect` | `--base <c> --client-dual-id <id> --product-id <id> [--dry-run]` | WRITE | Earn |
 
 ### Key Workflow Section: invest
@@ -74,7 +74,7 @@ All commands follow the pattern `pionex-trade-cli earn dual <subcommand> [flags]
 The invest workflow must be presented as a mandatory 3-step process:
 
 ```
-Step 1: earn dual open-products → get productId
+Step 1: earn dual open_products → get productId
 Step 2: earn dual prices        → get fresh profit value
 Step 3: earn dual invest        → pass profit from step 2 unchanged
 ```

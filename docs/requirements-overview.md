@@ -56,19 +56,19 @@ This document summarizes the requirement history and current status of the Pione
 
 Public (no auth):
 - 📋 `earn dual symbols` — List supported trading pairs with min/max investment amounts
-- 📋 `earn dual open-products` — List open products for a pair and type (DUAL_BASE / DUAL_CURRENCY)
+- 📋 `earn dual open_products` — List open products for a pair and type (DUAL_BASE / DUAL_CURRENCY)
 - 📋 `earn dual prices` — Get current yield rate and investability per product ID
 - 📋 `earn dual index` — Real-time index price for a pair
-- 📋 `earn dual delivery-prices` — Historical settlement delivery prices
+- 📋 `earn dual delivery_prices` — Historical settlement delivery prices
 
 Private (View permission):
 - 📋 `earn dual balances` — User's dual investment account balances
-- 📋 `earn dual get-invests` — Batch query investment orders by client IDs
+- 📋 `earn dual get_invests` — Batch query investment orders by client IDs
 - 📋 `earn dual records` — Paginated investment history
 
 Private (Earn permission):
 - 📋 `earn dual invest` — Create a new investment order (requires fresh `profit` from `/prices`)
-- 📋 `earn dual revoke-invest` — Revoke a pending investment order
+- 📋 `earn dual revoke_invest` — Revoke a pending investment order
 - 📋 `earn dual collect` — Collect settled earnings into spot account
 
 ### Cross-Cutting Requirements

@@ -68,7 +68,7 @@ All endpoints: weight 1, shared 10 req/sec limit (IP-based and account-based).
 
 Use `earn dual <subcommand>` to match the API path `/earn/dual/` and keep it separate from spot trading:
 - `pionex-trade-cli earn dual symbols`
-- `pionex-trade-cli earn dual open-products`
+- `pionex-trade-cli earn dual open_products`
 - etc.
 
 ### Dry-run Scope

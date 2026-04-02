@@ -51,7 +51,7 @@ The safety rules in skills (dry-run, explicit params, no inference) exist becaus
 
 **1. Mandatory 2-step invest flow (prices → invest)**
 
-The Pionex API rejects the `invest` call if the `profit` value is stale. The skill encodes this as a non-negotiable 3-step workflow: open-products → prices → invest. The agent must not insert other commands between steps 2 and 3.
+The Pionex API rejects the `invest` call if the `profit` value is stale. The skill encodes this as a non-negotiable 3-step workflow: open_products → prices → invest. The agent must not insert other commands between steps 2 and 3.
 
 **2. BTC/ETH use USDXO quote, all others use USDT**
 

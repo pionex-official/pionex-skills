@@ -34,7 +34,7 @@ x-cli-interface:
         - name: "market tickers"
           flags: ["--symbol <s>", "--type SPOT|PERP"]
           description: "24h price ticker(s)."
-        - name: "market book-tickers"
+        - name: "market book_tickers"
           flags: ["--symbol <s>", "--type SPOT|PERP"]
           description: "Best bid/ask ticker(s)."
         - name: "market klines <symbol> <interval>"
@@ -73,14 +73,14 @@ x-cli-interface:
         - name: "orders fills"
           flags: ["--symbol <s>", "--startTime <ms>", "--endTime <ms>"]
           description: "Executed trade fills."
-        - name: "orders fills-by-order-id"
+        - name: "orders fills_by_order_id"
           flags: ["--symbol <s>", "--order-id <id>"]
           description: "Fills for one specific order."
         - name: "orders cancel"
           flags: ["--symbol <s>", "--order-id <id>", "--dry-run"]
           description: "Cancel a single order."
           mutating: true
-        - name: "orders cancel-all"
+        - name: "orders cancel_all"
           flags: ["--symbol <s>", "--dry-run"]
           description: "Cancel all open orders for symbol. Always preview with orders open first."
           mutating: true

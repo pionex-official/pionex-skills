@@ -31,8 +31,8 @@ When `pionex-ai-kit` adds or changes CLI commands, the corresponding skill files
 The following updates were made to skills to align with recent CLI changes:
 - `pionex-bot`: removed `openPrice`/`keyId` references; aligned to `adjust_params` / `reduce` naming
 - `pionex-bot`: uses nested `bot futures_grid <cmd>` route (not flat `bot <cmd>`)
-- `pionex-market`: added `market book-tickers` command
-- `pionex-trade`: added `orders fills-by-order-id` command
+- `pionex-market`: added `market book_tickers` command
+- `pionex-trade`: added `orders fills_by_order_id` command
 
 ### Safety Design Rationale
 

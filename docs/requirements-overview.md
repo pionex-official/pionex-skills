@@ -4,7 +4,7 @@ This document summarizes the requirement history and current status of the Pione
 
 ## Last Updated
 
-**Date:** 2026-04-01 (updated by iteration `2026040100_earn_dual`)
+**Date:** 2026-04-02 (updated by iteration `2026040200_bot_order_list`)
 
 ## Current Status
 
@@ -44,6 +44,7 @@ This document summarizes the requirement history and current status of the Pione
 **Status:** Completed  
 **Scope:** Futures Grid Bot lifecycle — requires API credentials with bot permissions
 
+- ✅ `bot order_list` — List bot orders across all types with filters and pagination
 - ✅ `bot futures_grid get` — Query bot order status
 - ✅ `bot futures_grid create` — Create a new futures grid bot
 - ✅ `bot futures_grid adjust_params` — Add investment / modify range / trigger invest-in
@@ -87,6 +88,11 @@ Each skill must:
 4. Include `--dry-run` instructions for destructive commands
 
 ## Iteration History
+
+### 2026-04-02: Bot Order List
+**Iteration Directory:** `specs/2026040200_bot_order_list/`
+**Requirements:** Add `bot order_list` command to `pionex-bot` skill — list/paginate bot orders across futures_grid, spot_grid, smart_copy
+**Source:** CLI implementation in `pionex-ai-kit` PR #27
 
 ### 2026-04-01: Earn Dual Skill
 **Iteration Directory:** `specs/2026040100_earn_dual/`

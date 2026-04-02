@@ -2,7 +2,7 @@
 
 ## Background
 
-The `pionex-bot` skill currently only supports single-order lookup (`bot futures_grid get`). There is no way to list or paginate through bot orders in bulk. Users need to query running/canceled orders, filter by symbol, and paginate through results across all bot types.
+The `pionex-bot` skill currently only supports single-order lookup (`bot futures_grid get`). There is no way to list or paginate through bot orders in bulk. Users need to query running/finished orders, filter by symbol, and paginate through results across all bot types.
 
 ## Source
 
@@ -22,7 +22,7 @@ The `pionex-bot` skill currently only supports single-order lookup (`bot futures
 
 ```bash
 pionex-trade-cli bot order_list \
-  [--status running|canceled] \
+  [--status running|finished] \
   [--base <BASE>] \
   [--quote <QUOTE>] \
   [--page-token <token>] \
@@ -35,7 +35,7 @@ pionex-trade-cli bot order_list \
 
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `--status` | string | No | — | `running` or `canceled` |
+| `--status` | string | No | — | `running` or `finished` |
 | `--base` | string | No | — | Base currency filter (e.g. `BTC`) |
 | `--quote` | string | No | — | Quote currency filter (e.g. `USDT`) |
 | `--page-token` | string | No | — | Pagination cursor from previous response |

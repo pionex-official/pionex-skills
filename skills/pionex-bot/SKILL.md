@@ -36,7 +36,7 @@ Use this skill for Pionex Futures Grid Bot lifecycle actions: get, create, adjus
 
 | Command | Type | Description |
 |---------|------|-------------|
-| `pionex-trade-cli bot order_list [--status running\|canceled] [--base BTC] [--quote USDT] [--page-token <token>] [--bu-order-types futures_grid,spot_grid,smart_copy]` | READ | List bot orders with optional filters and pagination |
+| `pionex-trade-cli bot order_list [--status running\|finished] [--base BTC] [--quote USDT] [--page-token <token>] [--bu-order-types futures_grid,spot_grid,smart_copy]` | READ | List bot orders with optional filters and pagination |
 | `pionex-trade-cli bot futures_grid get --bu-order-id <id>` | READ | Query one futures grid bot order |
 | `pionex-trade-cli bot futures_grid create --base BTC --quote USDT --bu-order-data-json '<json>' [--dry-run]` | WRITE | Create futures grid bot |
 | `pionex-trade-cli bot futures_grid adjust_params --body-json '<json>' [--dry-run]` | WRITE | Add investment / modify range / trigger invest-in |
@@ -62,7 +62,7 @@ pionex-trade-cli bot order_list --status running
 pionex-trade-cli bot order_list --base BTC --quote USDT
 
 # Paginate to next page
-pionex-trade-cli bot order_list --status canceled --page-token <nextPageToken>
+pionex-trade-cli bot order_list --status finished --page-token <nextPageToken>
 
 # Read one bot status
 pionex-trade-cli bot futures_grid get --bu-order-id 123456789

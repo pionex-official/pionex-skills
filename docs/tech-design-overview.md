@@ -4,7 +4,7 @@ This document describes the detailed technical design of the Pionex Skills proje
 
 ## Last Updated
 
-**Date:** 2026-04-02 (updated by iteration `2026040200_bot_order_list`)
+**Date:** 2026-04-03 (updated by iteration `2026040300_spot_grid`)
 
 ## Skill File Structure
 
@@ -104,6 +104,26 @@ Uses nested command structure for lifecycle: `pionex-trade-cli bot futures_grid 
 `adjust_params` and `reduce` use `--body-json` for structured payload.
 
 Safety: `buOrderId` must never be inferred — always require explicit user value.
+
+`spot_grid` uses the same nested structure (`pionex-trade-cli bot spot_grid <subcommand>`) but has a different subcommand set:
+
+| Subcommand | Type | Notes |
+|---|---|---|
+| `get` | READ | Same pattern as futures_grid |
+| `get_ai_strategy` | READ | Unique to spot_grid — recommends top/bottom/row before create |
+| `create` | WRITE | No `leverage`, `trend`, `extraMargin` fields |
+| `adjust_params` | WRITE | Modifies price range only |
+| `invest_in` | WRITE | Standalone add-investment (unlike futures_grid where it's part of `adjust_params`) |
+| `cancel` | WRITE | No `--close-sell-model` flag |
+| `profit` | WRITE | Unique to spot_grid — extracts accumulated grid profits |
+
+No `reduce` subcommand for spot_grid (no leveraged position to reduce).
+
+Recommended spot grid creation flow:
+1. `get_ai_strategy` → get AI-recommended params (if user hasn't specified range)
+2. `create --dry-run` → preview
+3. Confirm with user
+4. `create` (without `--dry-run`)
 
 ### pionex-earn-dual
 

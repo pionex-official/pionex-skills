@@ -4,7 +4,7 @@ This document records key decisions, lessons learned, and non-obvious technical 
 
 ## Last Updated
 
-**Date:** 2026-04-02
+**Date:** 2026-04-03
 
 ---
 
@@ -90,3 +90,35 @@ The CLI route is `pionex-trade-cli bot order_list`, not `bot futures_grid list`.
 **4. pionex-bot skill version bumped to 0.2.0**
 
 Adding a new command (minor change) warrants a minor version bump per the versioning policy in `tech-design-overview.md`.
+
+---
+
+## Iteration: 2026040300_spot_grid (2026-04-03)
+
+**Added:** 7 `bot spot_grid` subcommands to `skills/pionex-bot/SKILL.md`
+
+### Key Decisions
+
+**1. `spot_grid` follows the same nested route as `futures_grid`**
+
+The CLI structure is `pionex-trade-cli bot spot_grid <subcommand>`, parallel to `bot futures_grid <subcommand>`. Cross-type listing still uses the top-level `bot order_list` command with `--bu-order-types spot_grid`.
+
+**2. `invest_in` is a standalone command (not part of `adjust_params`)**
+
+In futures_grid, adding investment is done via `adjust_params --body-json '{"type":"invest_in",...}'`. In spot_grid, there is a dedicated `invest_in` subcommand. This distinction must be documented clearly to prevent agents from using the wrong command.
+
+**3. `get_ai_strategy` is a pre-create READ command unique to spot grid**
+
+Agents should call `get_ai_strategy` to obtain AI-recommended `top`, `bottom`, and `row` values when the user hasn't explicitly provided a price range. This is a non-blocking recommendation — if the user provides explicit params, skip the AI step.
+
+**4. Spot grid has no leverage, trend, or reduce**
+
+Spot grid is a pure spot strategy. Payloads must never include `leverage`, `trend`, or `extraMargin`. There is no `reduce` subcommand because there is no leveraged position to reduce.
+
+**5. `profit` command extracts accumulated grid profits**
+
+This is unique to spot grid. The profits accumulate inside the bot; `profit` triggers an explicit extraction to the spot account. Requires `--dry-run` preview before execution.
+
+**6. pionex-bot skill version bumped to 0.3.0**
+
+Adding a new command group (spot_grid) is a minor change — warrants 0.2.0 → 0.3.0.

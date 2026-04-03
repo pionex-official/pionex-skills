@@ -4,7 +4,7 @@ This document summarizes the requirement history and current status of the Pione
 
 ## Last Updated
 
-**Date:** 2026-04-02 (updated by iteration `2026040200_bot_order_list`)
+**Date:** 2026-04-03 (updated by iteration `2026040300_spot_grid`)
 
 ## Current Status
 
@@ -42,14 +42,21 @@ This document summarizes the requirement history and current status of the Pione
 
 #### Skill: pionex-bot
 **Status:** Completed  
-**Scope:** Futures Grid Bot lifecycle — requires API credentials with bot permissions
+**Scope:** Futures Grid and Spot Grid bot lifecycle — requires API credentials with bot permissions
 
 - ✅ `bot order_list` — List bot orders across all types with filters and pagination
-- ✅ `bot futures_grid get` — Query bot order status
+- ✅ `bot futures_grid get` — Query futures grid bot order status
 - ✅ `bot futures_grid create` — Create a new futures grid bot
 - ✅ `bot futures_grid adjust_params` — Add investment / modify range / trigger invest-in
-- ✅ `bot futures_grid reduce` — Reduce bot position
-- ✅ `bot futures_grid cancel` — Cancel and close bot
+- ✅ `bot futures_grid reduce` — Reduce futures grid bot position
+- ✅ `bot futures_grid cancel` — Cancel and close futures grid bot
+- ✅ `bot spot_grid get` — Query spot grid bot order status
+- ✅ `bot spot_grid get_ai_strategy` — Fetch AI-recommended grid parameters for a trading pair
+- ✅ `bot spot_grid create` — Create a new spot grid bot (no leverage/trend)
+- ✅ `bot spot_grid adjust_params` — Modify spot grid price range
+- ✅ `bot spot_grid invest_in` — Add funds to a running spot grid bot
+- ✅ `bot spot_grid cancel` — Cancel and close spot grid bot
+- ✅ `bot spot_grid profit` — Extract accumulated grid profits
 
 #### Skill: pionex-earn-dual
 **Status:** Planned (CLI implementation pending in `pionex-ai-kit#16`)
@@ -88,6 +95,11 @@ Each skill must:
 4. Include `--dry-run` instructions for destructive commands
 
 ## Iteration History
+
+### 2026-04-03: Spot Grid Bot
+**Iteration Directory:** `specs/2026040300_spot_grid/`
+**Requirements:** Add 7 `bot spot_grid` subcommands to `pionex-bot` skill — get, get_ai_strategy, create, adjust_params, invest_in, cancel, profit
+**Source:** CLI implementation in `pionex-ai-kit` PR #30
 
 ### 2026-04-02: Bot Order List
 **Iteration Directory:** `specs/2026040200_bot_order_list/`

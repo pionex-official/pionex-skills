@@ -101,6 +101,14 @@ x-cli-interface:
             Create a futures grid bot. JSON fields: top, bottom, row, grid_type (arithmetic|geometric),
             trend (long|short|neutral), leverage, quoteInvestment, extraMargin.
           mutating: true
+        - name: "bot futures_grid check_params"
+          flags:
+            - "--base <currency>"
+            - "--quote <currency>"
+            - "--bu-order-data-json '<json>'"
+          description: >
+            Validate futures grid parameters before creating a bot. On FailedWithData response,
+            surfaces min_investment, max_investment, and slippage constraints.
         - name: "bot futures_grid adjust_params"
           flags: ["--body-json '<json>'", "--dry-run"]
           description: "Add investment / modify range / trigger invest-in."
@@ -115,4 +123,52 @@ x-cli-interface:
             - "--close-sell-model TO_QUOTE|TO_USDT"
             - "--dry-run"
           description: "Cancel and close bot."
+          mutating: true
+        - name: "bot order_list"
+          flags:
+            - "--status running|finished"
+            - "--base <currency>"
+            - "--quote <currency>"
+            - "--page-token <token>"
+            - "--bu-order-types futures_grid,spot_grid,smart_copy"
+          description: "List bot orders across all types with optional filters and pagination."
+        - name: "bot spot_grid get"
+          flags: ["--bu-order-id <id>"]
+          description: "Query one spot grid bot order."
+        - name: "bot spot_grid get_ai_strategy"
+          flags: ["--base <currency>", "--quote <currency>"]
+          description: "Fetch AI-recommended grid parameters (top, bottom, row) for a trading pair."
+        - name: "bot spot_grid create"
+          flags:
+            - "--base <currency>"
+            - "--quote <currency>"
+            - "--bu-order-data-json '<json>'"
+            - "--dry-run"
+          description: >
+            Create a spot grid bot. JSON fields: top, bottom, row, grid_type (arithmetic|geometric),
+            quoteInvestment. No leverage, trend, or extraMargin.
+          mutating: true
+        - name: "bot spot_grid check_params"
+          flags:
+            - "--base <currency>"
+            - "--quote <currency>"
+            - "--bu-order-data-json '<json>'"
+          description: >
+            Validate spot grid parameters before creating a bot. On FailedWithData response,
+            surfaces min_investment, max_investment, and slippage constraints.
+        - name: "bot spot_grid adjust_params"
+          flags: ["--body-json '<json>'", "--dry-run"]
+          description: "Modify spot grid price range."
+          mutating: true
+        - name: "bot spot_grid invest_in"
+          flags: ["--body-json '<json>'", "--dry-run"]
+          description: "Add funds to a running spot grid bot."
+          mutating: true
+        - name: "bot spot_grid cancel"
+          flags: ["--bu-order-id <id>", "--dry-run"]
+          description: "Cancel and close spot grid bot."
+          mutating: true
+        - name: "bot spot_grid profit"
+          flags: ["--body-json '<json>'", "--dry-run"]
+          description: "Extract accumulated grid profits to spot account."
           mutating: true

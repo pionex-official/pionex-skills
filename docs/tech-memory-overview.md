@@ -122,3 +122,31 @@ This is unique to spot grid. The profits accumulate inside the bot; `profit` tri
 **6. pionex-bot skill version bumped to 0.3.0**
 
 Adding a new command group (spot_grid) is a minor change — warrants 0.2.0 → 0.3.0.
+
+---
+
+## Iteration: 2026040800_grid_check_params (2026-04-08)
+
+**Added:** `bot futures_grid check_params` and `bot spot_grid check_params` to `skills/pionex-bot/SKILL.md`
+
+### Key Decisions
+
+**1. `check_params` is READ-only — no `--dry-run` needed**
+
+The command calls the exchange's parameter validation API (`POST /api/v1/bot/orders/*/checkParams`) without creating any order. It is informational only, so `--dry-run` is not applicable.
+
+**2. `FailedWithData` carries investment range and slippage**
+
+When parameters are invalid, the API responds with a `FailedWithData` error that includes `min_investment`, `max_investment`, and `slippage`. The skill mandates that agents surface these values to the user — not just report "validation failed".
+
+**3. `check_params` is inserted before `create --dry-run` in the creation flow**
+
+The recommended creation flow is now: `check_params` → `create --dry-run` → confirm → `create`. This catches parameter errors before the dry-run step, avoiding a redundant API round-trip on invalid params.
+
+**4. pionex-bot skill version bumped to 0.4.0**
+
+Adding new READ commands to both `futures_grid` and `spot_grid` is a minor change — warrants 0.3.0 → 0.4.0.
+
+**5. `tech-api-overview.yaml` also gained missing `spot_grid` commands**
+
+The yaml only contained `futures_grid` commands. During this iteration the full `spot_grid` command set (added in iteration `2026040300_spot_grid`) was also backfilled, along with both new `check_params` entries.

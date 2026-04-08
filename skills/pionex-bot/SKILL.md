@@ -9,7 +9,7 @@ description: >
 license: MIT
 metadata:
   author: pionex
-  version: "0.3.0"
+  version: "0.4.0"
   agent:
     requires:
       bins: ["pionex-trade-cli"]
@@ -40,12 +40,14 @@ Use this skill for Pionex bot lifecycle actions: Futures Grid (get, create, adju
 | `pionex-trade-cli bot order_list [--status running\|finished] [--base BTC] [--quote USDT] [--page-token <token>] [--bu-order-types futures_grid,spot_grid,smart_copy]` | READ | List bot orders with optional filters and pagination |
 | `pionex-trade-cli bot futures_grid get --bu-order-id <id>` | READ | Query one futures grid bot order |
 | `pionex-trade-cli bot futures_grid create --base BTC --quote USDT --bu-order-data-json '<json>' [--dry-run]` | WRITE | Create futures grid bot |
+| `pionex-trade-cli bot futures_grid check_params --base <BASE> --quote <QUOTE> --bu-order-data-json '<json>'` | READ | Validate futures grid params before create. On FailedWithData, surfaces `min_investment` / `max_investment` / `slippage`. |
 | `pionex-trade-cli bot futures_grid adjust_params --body-json '<json>' [--dry-run]` | WRITE | Add investment / modify range / trigger invest-in |
 | `pionex-trade-cli bot futures_grid reduce --body-json '<json>' [--dry-run]` | WRITE | Reduce bot position |
 | `pionex-trade-cli bot futures_grid cancel --bu-order-id <id> [--close-sell-model TO_QUOTE\\|TO_USDT] [--dry-run]` | WRITE | Cancel and close bot |
 | `pionex-trade-cli bot spot_grid get --bu-order-id <id>` | READ | Query one spot grid bot order |
 | `pionex-trade-cli bot spot_grid get_ai_strategy --base <BASE> --quote <QUOTE>` | READ | Fetch AI-recommended grid parameters for a pair |
 | `pionex-trade-cli bot spot_grid create --base <BASE> --quote <QUOTE> --bu-order-data-json '<json>' [--dry-run]` | WRITE | Create a new spot grid bot |
+| `pionex-trade-cli bot spot_grid check_params --base <BASE> --quote <QUOTE> --bu-order-data-json '<json>'` | READ | Validate spot grid params before create. On FailedWithData, surfaces `min_investment` / `max_investment` / `slippage`. |
 | `pionex-trade-cli bot spot_grid adjust_params --body-json '<json>' [--dry-run]` | WRITE | Modify grid price range |
 | `pionex-trade-cli bot spot_grid invest_in --body-json '<json>' [--dry-run]` | WRITE | Add funds to a running spot grid bot |
 | `pionex-trade-cli bot spot_grid cancel --bu-order-id <id> [--dry-run]` | WRITE | Cancel and close spot grid bot |
@@ -54,15 +56,16 @@ Use this skill for Pionex bot lifecycle actions: Futures Grid (get, create, adju
 ## Safety Rules
 
 1. Confirm write intent for create/adjust/reduce/cancel before running without `--dry-run`.
-2. Never infer `buOrderId`, leverage, range, or amount; require explicit user values.
-3. If API rejects params, surface exact error and propose a corrected payload.
+2. Call `check_params` before `create` to validate parameters. If the response is `FailedWithData`, surface the returned `min_investment`, `max_investment`, and `slippage` values to the user before retrying.
+3. Never infer `buOrderId`, leverage, range, or amount; require explicit user values.
+4. If API rejects params, surface exact error and propose a corrected payload.
 
 ### Spot Grid Specific
 
-4. Call `get_ai_strategy` before `create` when the user has not provided explicit price range and row count.
-5. Never add `leverage`, `trend`, or `extraMargin` fields to spot grid payloads — spot grid is leverage-free.
-6. Verify account has sufficient base + quote balance before creating or adding investment.
-7. `invest_in` and `profit` are standalone commands — do not confuse with `adjust_params`.
+5. Call `get_ai_strategy` before `create` when the user has not provided explicit price range and row count.
+6. Never add `leverage`, `trend`, or `extraMargin` fields to spot grid payloads — spot grid is leverage-free.
+7. Verify account has sufficient base + quote balance before creating or adding investment.
+8. `invest_in` and `profit` are standalone commands — do not confuse with `adjust_params`.
 
 ## Examples
 
@@ -84,6 +87,12 @@ pionex-trade-cli bot order_list --status finished --page-token <nextPageToken>
 # Read one bot status
 pionex-trade-cli bot futures_grid get --bu-order-id 123456789
 
+# Validate futures grid params before creating
+pionex-trade-cli bot futures_grid check_params \
+  --base BTC \
+  --quote USDT \
+  --bu-order-data-json '{"top":"110000","bottom":"90000","row":100,"grid_type":"arithmetic","trend":"long","leverage":5,"extraMargin":"0","quoteInvestment":"100"}'
+
 # Dry-run create
 pionex-trade-cli bot futures_grid create \
   --base BTC \
@@ -98,6 +107,12 @@ pionex-trade-cli bot futures_grid adjust_params --body-json '{"buOrderId":"12345
 
 # Get AI-recommended parameters for BTC/USDT spot grid
 pionex-trade-cli bot spot_grid get_ai_strategy --base BTC --quote USDT
+
+# Validate spot grid params before creating
+pionex-trade-cli bot spot_grid check_params \
+  --base BTC \
+  --quote USDT \
+  --bu-order-data-json '{"top":"110000","bottom":"90000","row":50,"grid_type":"arithmetic","quoteInvestment":"200"}'
 
 # Dry-run create spot grid (using AI-recommended or user-specified params)
 pionex-trade-cli bot spot_grid create \

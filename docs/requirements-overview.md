@@ -4,7 +4,7 @@ This document summarizes the requirement history and current status of the Pione
 
 ## Last Updated
 
-**Date:** 2026-04-03 (updated by iteration `2026040300_spot_grid`)
+**Date:** 2026-04-08 (updated by iteration `2026040800_grid_check_params`)
 
 ## Current Status
 
@@ -57,6 +57,8 @@ This document summarizes the requirement history and current status of the Pione
 - ✅ `bot spot_grid invest_in` — Add funds to a running spot grid bot
 - ✅ `bot spot_grid cancel` — Cancel and close spot grid bot
 - ✅ `bot spot_grid profit` — Extract accumulated grid profits
+- ✅ `bot futures_grid check_params` — Validate futures grid parameters before create (surfaces min/max investment and slippage on failure)
+- ✅ `bot spot_grid check_params` — Validate spot grid parameters before create (surfaces min/max investment and slippage on failure)
 
 #### Skill: pionex-earn-dual
 **Status:** Planned (CLI implementation pending in `pionex-ai-kit#16`)
@@ -95,6 +97,11 @@ Each skill must:
 4. Include `--dry-run` instructions for destructive commands
 
 ## Iteration History
+
+### 2026-04-08: Grid Bot Params Check
+**Iteration Directory:** `specs/2026040800_grid_check_params/`
+**Requirements:** Add `bot futures_grid check_params` and `bot spot_grid check_params` commands to `pionex-bot` skill — validate parameters before creating a grid bot; surface investment range and slippage constraints on failure
+**Source:** CLI implementation in `pionex-ai-kit` PR #37
 
 ### 2026-04-03: Spot Grid Bot
 **Iteration Directory:** `specs/2026040300_spot_grid/`

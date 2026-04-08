@@ -4,7 +4,7 @@ This document describes the detailed technical design of the Pionex Skills proje
 
 ## Last Updated
 
-**Date:** 2026-04-03 (updated by iteration `2026040300_spot_grid`)
+**Date:** 2026-04-08 (updated by iteration `2026040800_grid_check_params`)
 
 ## Skill File Structure
 
@@ -119,11 +119,15 @@ Safety: `buOrderId` must never be inferred — always require explicit user valu
 
 No `reduce` subcommand for spot_grid (no leveraged position to reduce).
 
-Recommended spot grid creation flow:
-1. `get_ai_strategy` → get AI-recommended params (if user hasn't specified range)
+Recommended creation flow (applies to both `futures_grid` and `spot_grid`):
+1. `check_params` → validate parameters against exchange constraints (new in v0.4.0)
 2. `create --dry-run` → preview
 3. Confirm with user
 4. `create` (without `--dry-run`)
+
+For spot grid, also insert `get_ai_strategy` before step 1 when the user hasn't specified a price range.
+
+`check_params` is READ-only — it calls the exchange's validation API without creating an order. If the response is `FailedWithData`, it carries `min_investment`, `max_investment`, and `slippage` fields. Agents must surface these to the user before retrying.
 
 ### pionex-earn-dual
 

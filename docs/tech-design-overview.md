@@ -4,7 +4,7 @@ This document describes the detailed technical design of the Pionex Skills proje
 
 ## Last Updated
 
-**Date:** 2026-04-08 (updated by iteration `2026040800_grid_check_params`)
+**Date:** 2026-04-14 (updated by iteration `2026041400_bot_smart_copy`)
 
 ## Skill File Structure
 
@@ -119,13 +119,51 @@ Safety: `buOrderId` must never be inferred — always require explicit user valu
 
 No `reduce` subcommand for spot_grid (no leveraged position to reduce).
 
-Recommended creation flow (applies to both `futures_grid` and `spot_grid`):
+Recommended creation flow (applies to `futures_grid`, `spot_grid`, and `smart_copy`):
 1. `check_params` → validate parameters against exchange constraints (new in v0.4.0)
 2. `create --dry-run` → preview
 3. Confirm with user
 4. `create` (without `--dry-run`)
 
 For spot grid, also insert `get_ai_strategy` before step 1 when the user hasn't specified a price range.
+
+`smart_copy` uses the same nested structure (`pionex-trade-cli bot smart_copy <subcommand>`):
+
+| Subcommand | Type | Notes |
+|---|---|---|
+| `get` | READ | Same pattern as futures_grid / spot_grid |
+| `check_params` | READ | Takes **flat flags** (not `--bu-order-data-json`): `--leverage` and `--quote-investment` required. Use `--quote-investment 0` for range-only query. |
+| `create` | WRITE | `buOrderData` uses **portfolio model** (snake_case): `quote_total_investment` + `portfolio` array. Extra flags: `--copy-from`, `--copy-type`, `--note`. |
+| `cancel` | WRITE | No `closeSellModel`. Optional `--close-note` and `--convert-into-earn-coin` flag. |
+
+No `get_ai_strategy`, `reduce`, `invest_in`, or `profit` for smart copy.
+
+`buOrderData` JSON schema for `create`:
+
+```json
+{
+  "quote_total_investment": "string",   // required
+  "portfolio": [                        // required, non-empty array
+    {
+      "base": "string",                 // required
+      "signal_type": "string (UUID)",   // required
+      "leverage": integer,              // required
+      "percent": "string",              // optional, e.g. "0.5" = 50% allocation
+      "signal_param": "string (JSON)",  // optional
+      "profit_stop_ratio": "string",    // optional
+      "loss_stop_ratio": "string"       // optional
+    }
+  ],
+  "compound": boolean,                  // optional
+  "profit_stop_maker": boolean          // optional
+}
+```
+
+`signal` is a peer subgroup to `smart_copy` under `bot`:
+
+| Subcommand | Type | Notes |
+|---|---|---|
+| `add_listener` | WRITE | **Push** a trading signal to Pionex signal platform (signal **provider** role, not consumer). Required: `--signal-type`, `--signal-param`, `--base`, `--quote`, `--time` (RFC 3339), `--price`, `--action` (buy\|sell), `--position-size`, `--contracts`. |
 
 `check_params` is READ-only — it calls the exchange's validation API without creating an order. If the response is `FailedWithData`, it carries `min_investment`, `max_investment`, and `slippage` fields. Agents must surface these to the user before retrying.
 

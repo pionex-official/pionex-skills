@@ -9,7 +9,7 @@ description: >
 license: MIT
 metadata:
   author: pionex
-  version: "0.4.0"
+  version: "0.5.0"
   agent:
     requires:
       bins: ["pionex-trade-cli"]
@@ -23,12 +23,14 @@ metadata:
 
 # Pionex Bot Skill
 
-Use this skill for Pionex bot lifecycle actions: Futures Grid (get, create, adjust, reduce, cancel) and Spot Grid (get, get_ai_strategy, create, adjust_params, invest_in, cancel, profit).
+Use this skill for Pionex bot lifecycle actions: Futures Grid (get, create, adjust, reduce, cancel), Spot Grid (get, get_ai_strategy, create, adjust_params, invest_in, cancel, profit), and Smart Copy (get, create, check_params, cancel). Also handles pushing trading signals to the Pionex signal platform.
 
 ## Routing
 
 - Bot lifecycle (futures grid) -> **pionex-bot** (this skill)
 - Bot lifecycle (spot grid) -> **pionex-bot** (this skill)
+- Bot lifecycle (smart copy) -> **pionex-bot** (this skill)
+- Push trading signal to signal platform (signal provider role) -> **pionex-bot** (this skill)
 - Market data -> **pionex-market**
 - Spot balance -> **pionex-portfolio**
 - Spot order placement/cancel -> **pionex-trade**
@@ -52,6 +54,11 @@ Use this skill for Pionex bot lifecycle actions: Futures Grid (get, create, adju
 | `pionex-trade-cli bot spot_grid invest_in --body-json '<json>' [--dry-run]` | WRITE | Add funds to a running spot grid bot |
 | `pionex-trade-cli bot spot_grid cancel --bu-order-id <id> [--dry-run]` | WRITE | Cancel and close spot grid bot |
 | `pionex-trade-cli bot spot_grid profit --body-json '<json>' [--dry-run]` | WRITE | Extract accumulated grid profits |
+| `pionex-trade-cli bot smart_copy get --bu-order-id <id>` | READ | Query one smart copy bot order |
+| `pionex-trade-cli bot smart_copy check_params --base <BASE> --quote <QUOTE> --leverage <n> --quote-investment <amount> [--signal-type <uuid>] [--signal-param <json>]` | READ | Validate smart copy params. Use `--quote-investment 0` to get investment range only. On FailedWithData, surfaces constraints. |
+| `pionex-trade-cli bot smart_copy create --base <BASE> --quote <QUOTE> --bu-order-data-json '<json>' [--copy-from <id>] [--copy-type <type>] [--note <note>] [--dry-run]` | WRITE | Create a smart copy bot (portfolio model) |
+| `pionex-trade-cli bot smart_copy cancel --bu-order-id <id> [--close-note <note>] [--convert-into-earn-coin] [--dry-run]` | WRITE | Cancel and close smart copy bot |
+| `pionex-trade-cli bot signal add_listener --signal-type <uuid> --signal-param <json> --base <BASE> --quote <QUOTE> --time <iso> --price <price> --action <buy\|sell> --position-size <size> --contracts <n> [--direction <dir>] [--dry-run]` | WRITE | Push a trading signal to Pionex signal platform (signal provider role) |
 
 ## Safety Rules
 
@@ -66,6 +73,15 @@ Use this skill for Pionex bot lifecycle actions: Futures Grid (get, create, adju
 6. Never add `leverage`, `trend`, or `extraMargin` fields to spot grid payloads — spot grid is leverage-free.
 7. Verify account has sufficient base + quote balance before creating or adding investment.
 8. `invest_in` and `profit` are standalone commands — do not confuse with `adjust_params`.
+
+### Smart Copy Specific
+
+9. `portfolio` array in `buOrderData` must not be empty; each entry requires `base`, `signal_type` (UUID), and `leverage` (integer).
+10. Never infer `signal_type` UUIDs; require explicit user values.
+11. `--copy-from <id>` in `create` copies parameters from an existing smart copy order — use only when the user explicitly requests it.
+12. `--convert-into-earn-coin` in `cancel` converts holdings into Earn products — confirm with user before using.
+13. `bot signal add_listener` is for **pushing** trading signals to the Pionex signal platform as a signal provider — it is NOT a consumer subscription command.
+14. `check_params` takes flat flags (`--leverage`, `--quote-investment`), not `--bu-order-data-json`. Use `--quote-investment 0` to query the investment range without validating a specific amount.
 
 ## Examples
 
@@ -139,4 +155,64 @@ pionex-trade-cli bot spot_grid cancel --bu-order-id 987654321 --dry-run
 
 # List running spot grid bots
 pionex-trade-cli bot order_list --status running --bu-order-types spot_grid
+
+# --- Smart Copy ---
+
+# Step 1: Get investment range for a signal (quote-investment 0 = range query only)
+pionex-trade-cli bot smart_copy check_params \
+  --base BTC \
+  --quote USDT \
+  --leverage 5 \
+  --quote-investment 0
+
+# Step 1b: Validate a specific investment amount
+pionex-trade-cli bot smart_copy check_params \
+  --base BTC \
+  --quote USDT \
+  --leverage 5 \
+  --quote-investment 100
+
+# Step 2: Dry-run create (single signal, leverage 5)
+pionex-trade-cli bot smart_copy create \
+  --base BTC \
+  --quote USDT \
+  --bu-order-data-json '{"quote_total_investment":"100","portfolio":[{"base":"BTC","signal_type":"<signal-uuid>","leverage":5}]}' \
+  --dry-run
+
+# Dry-run create with stop-loss/take-profit and multi-signal portfolio
+pionex-trade-cli bot smart_copy create \
+  --base BTC \
+  --quote USDT \
+  --bu-order-data-json '{"quote_total_investment":"200","portfolio":[{"base":"BTC","signal_type":"<uuid1>","leverage":5,"percent":"0.5","profit_stop_ratio":"0.3","loss_stop_ratio":"0.1"},{"base":"ETH","signal_type":"<uuid2>","leverage":3,"percent":"0.5"}]}' \
+  --dry-run
+
+# Query smart copy bot status
+pionex-trade-cli bot smart_copy get --bu-order-id 111222333
+
+# Cancel smart copy bot
+pionex-trade-cli bot smart_copy cancel \
+  --bu-order-id 111222333 \
+  --dry-run
+
+# Cancel and convert holdings into Earn products
+pionex-trade-cli bot smart_copy cancel \
+  --bu-order-id 111222333 \
+  --convert-into-earn-coin \
+  --dry-run
+
+# Push a trading signal to the Pionex signal platform (signal provider role)
+pionex-trade-cli bot signal add_listener \
+  --signal-type <uuid> \
+  --signal-param '{}' \
+  --base BTC \
+  --quote USDT \
+  --time "2026-04-15T10:00:00Z" \
+  --price 85000 \
+  --action buy \
+  --position-size 1 \
+  --contracts 1 \
+  --dry-run
+
+# List running smart copy bots
+pionex-trade-cli bot order_list --status running --bu-order-types smart_copy
 ```

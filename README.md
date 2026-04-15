@@ -29,7 +29,7 @@ are enforced for order placement, balance checks, and minimum order sizes.
 | [pionex-market](skills/pionex-market/SKILL.md) | Public market data: depth, tickers, symbols, klines, trades | No |
 | [pionex-portfolio](skills/pionex-portfolio/SKILL.md) | Account balance (spot) | Yes |
 | [pionex-trade](skills/pionex-trade/SKILL.md) | Spot orders: place, cancel, open orders, fills | Yes |
-| [pionex-bot](skills/pionex-bot/SKILL.md) | Futures Grid & Spot Grid Bot lifecycle: get/create/check_params/adjust/reduce/cancel; Spot Grid also supports get_ai_strategy, invest_in, profit | Yes |
+| [pionex-bot](skills/pionex-bot/SKILL.md) | Futures Grid, Spot Grid & Smart Copy Bot lifecycle: get/create/check_params/adjust/reduce/cancel; Spot Grid also supports get_ai_strategy, invest_in, profit; Signal provider subscription via `bot signal add_listener` | Yes |
 | [pionex-earn-dual](skills/pionex-earn-dual/SKILL.md) | Dual Investment: products, prices, invest, revoke, collect | No (public) / Yes (private) |
 
 All skills assume the `pionex-trade-cli` CLI is installed (`npm install -g @pionex/pionex-ai-kit`).  

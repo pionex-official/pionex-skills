@@ -172,3 +172,60 @@ x-cli-interface:
           flags: ["--body-json '<json>'", "--dry-run"]
           description: "Extract accumulated grid profits to spot account."
           mutating: true
+        - name: "bot smart_copy get"
+          flags: ["--bu-order-id <id>"]
+          description: "Query one smart copy bot order."
+        - name: "bot smart_copy check_params"
+          flags:
+            - "--base <currency> (required)"
+            - "--quote <currency> (required)"
+            - "--leverage <n> (required, integer)"
+            - "--quote-investment <amount> (required; use '0' for range-only query)"
+            - "--signal-type <uuid>"
+            - "--signal-param <json>"
+          description: >
+            Validate smart copy parameters. Takes flat flags (not --bu-order-data-json).
+            Use --quote-investment 0 to get min/max investment range without validating a specific amount.
+            On FailedWithData, surfaces investment constraints.
+        - name: "bot smart_copy create"
+          flags:
+            - "--base <currency> (required)"
+            - "--quote <currency> (required)"
+            - "--bu-order-data-json '<json>' (required)"
+            - "--copy-from <id>"
+            - "--copy-type <type>"
+            - "--note <note>"
+            - "--dry-run"
+          description: >
+            Create a smart copy bot (portfolio model). buOrderData JSON: quote_total_investment (required),
+            portfolio array (required, non-empty) each with base, signal_type (UUID), leverage (int);
+            optional per-entry: percent, signal_param, profit_stop_ratio, loss_stop_ratio.
+            Optional top-level: compound, profit_stop_maker.
+          mutating: true
+        - name: "bot smart_copy cancel"
+          flags:
+            - "--bu-order-id <id> (required)"
+            - "--close-note <note>"
+            - "--convert-into-earn-coin"
+            - "--dry-run"
+          description: >
+            Cancel and close smart copy bot. --convert-into-earn-coin converts holdings into
+            Earn products instead of returning to spot account.
+          mutating: true
+        - name: "bot signal add_listener"
+          flags:
+            - "--signal-type <uuid> (required)"
+            - "--signal-param <json> (required)"
+            - "--base <currency> (required)"
+            - "--quote <currency> (required)"
+            - "--time <iso> (required, RFC 3339)"
+            - "--price <price> (required)"
+            - "--action buy|sell (required)"
+            - "--position-size <size> (required, fraction e.g. '1'=100%)"
+            - "--contracts <n> (required)"
+            - "--direction <dir>"
+            - "--dry-run"
+          description: >
+            Push a trading signal to the Pionex signal platform (signal provider role).
+            NOT a consumer subscription command.
+          mutating: true

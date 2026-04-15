@@ -4,7 +4,7 @@ This document records key decisions, lessons learned, and non-obvious technical 
 
 ## Last Updated
 
-**Date:** 2026-04-03
+**Date:** 2026-04-14
 
 ---
 
@@ -150,3 +150,43 @@ Adding new READ commands to both `futures_grid` and `spot_grid` is a minor chang
 **5. `tech-api-overview.yaml` also gained missing `spot_grid` commands**
 
 The yaml only contained `futures_grid` commands. During this iteration the full `spot_grid` command set (added in iteration `2026040300_spot_grid`) was also backfilled, along with both new `check_params` entries.
+
+---
+
+## Iteration: 2026041400_bot_smart_copy (2026-04-14)
+
+**Added:** `bot smart_copy` subcommands and `bot signal add_listener` to `skills/pionex-bot/SKILL.md`
+
+### Key Decisions
+
+**1. `signal` is a peer subgroup to `smart_copy`, not nested under it**
+
+The CLI structure is `bot signal add_listener`, not `bot smart_copy signal add_listener`. The `signal` group is designed for future multi-bot signal support — other bot types may subscribe to signals later.
+
+**2. `leverageType="fixed"` requires explicit `leverage` — enforced in safety rules**
+
+The CLI's `parseSmartCopyBuOrderData()` rejects payloads where `leverageType="fixed"` but `leverage` is missing. The skill reflects this as a safety rule to prevent API rejections before they happen.
+
+**3. `closeSellModel` for `cancel` adds `NOT_SELL` option**
+
+Futures grid has `TO_QUOTE | TO_USDT`; spot grid has no close-sell-model flag; smart copy adds `NOT_SELL | TO_QUOTE | TO_USDT`. The skill documents the default (`NOT_SELL`) and mandates user confirmation.
+
+**4. No `get_ai_strategy`, `reduce`, `invest_in`, or `profit` for smart copy**
+
+Smart copy mirrors a signal provider's positions — investment sizing is handled at creation time via `copyMode` and `maxInvestPerOrder`, not through post-creation adjustments.
+
+**5. pionex-bot skill version bumped to 0.5.0**
+
+Adding a new command group (`smart_copy`) and a new subgroup (`signal`) is a minor change — warrants 0.4.0 → 0.5.0.
+
+### Revision (2026-04-15): Corrected from commit f49998b
+
+Initial docs were based on an earlier version of the PR. After reviewing commit f49998b, the following were corrected:
+
+**`smart_copy check_params` interface changed** — no longer uses `--bu-order-data-json`. Now takes flat flags: `--leverage` (int, required), `--quote-investment` (required; `"0"` = range query only), `--signal-type` (optional), `--signal-param` (optional).
+
+**`smart_copy create` buOrderData schema changed** — moved from single-provider model (leverageType/follow/fixed, camelCase) to **multi-signal portfolio model** (snake_case): `quote_total_investment` + `portfolio` array where each entry specifies `base`, `signal_type` (UUID), `leverage` (int), and optional `percent`, `profit_stop_ratio`, `loss_stop_ratio`. New flags: `--copy-type`, `--note`.
+
+**`smart_copy cancel` completely redesigned** — `--close-sell-model` removed. New flags: `--close-note` (string) and `--convert-into-earn-coin` (boolean, no value).
+
+**`bot signal add_listener` is provider-side, not consumer-side** — pushes a trading signal event to the Pionex signal platform. It is NOT a subscription command. Required fields: `--signal-type`, `--signal-param`, `--base`, `--quote`, `--time` (RFC 3339), `--price`, `--action`, `--position-size`, `--contracts`.

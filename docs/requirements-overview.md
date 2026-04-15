@@ -4,7 +4,7 @@ This document summarizes the requirement history and current status of the Pione
 
 ## Last Updated
 
-**Date:** 2026-04-08 (updated by iteration `2026040800_grid_check_params`)
+**Date:** 2026-04-14 (updated by iteration `2026041400_bot_smart_copy`)
 
 ## Current Status
 
@@ -59,6 +59,11 @@ This document summarizes the requirement history and current status of the Pione
 - ✅ `bot spot_grid profit` — Extract accumulated grid profits
 - ✅ `bot futures_grid check_params` — Validate futures grid parameters before create (surfaces min/max investment and slippage on failure)
 - ✅ `bot spot_grid check_params` — Validate spot grid parameters before create (surfaces min/max investment and slippage on failure)
+- ✅ `bot smart_copy get` — Query smart copy bot order by ID
+- ✅ `bot smart_copy create` — Create a new smart copy bot order (mirrors a signal provider's positions)
+- ✅ `bot smart_copy check_params` — Validate smart copy parameters before create
+- ✅ `bot smart_copy cancel` — Cancel and close smart copy bot
+- ✅ `bot signal add_listener` — Subscribe to a signal provider
 
 #### Skill: pionex-earn-dual
 **Status:** Planned (CLI implementation pending in `pionex-ai-kit#16`)
@@ -97,6 +102,11 @@ Each skill must:
 4. Include `--dry-run` instructions for destructive commands
 
 ## Iteration History
+
+### 2026-04-14: Smart Copy Bot
+**Iteration Directory:** `specs/2026041400_bot_smart_copy/`
+**Requirements:** Add `bot smart_copy` subcommands (get, create, check_params, cancel) and `bot signal add_listener` to `pionex-bot` skill — support copy-trading lifecycle and signal provider subscription
+**Source:** CLI implementation in `pionex-ai-kit` PR #38
 
 ### 2026-04-08: Grid Bot Params Check
 **Iteration Directory:** `specs/2026040800_grid_check_params/`

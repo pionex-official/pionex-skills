@@ -26,7 +26,7 @@ PR #38 (`pionex-official/pionex-ai-kit`) adds complete CLI + MCP support for Sma
 | `pionex_bot_smart_copy_create` | `bot smart_copy create` |
 | `pionex_bot_smart_copy_cancel` | `bot smart_copy cancel` |
 | `pionex_bot_smart_copy_check_params` | `bot smart_copy check_params` |
-| `pionex_bot_signal_add_listener` | `bot signal add_listener` |
+| `pionex_bot_signal_listener` | `bot signal listener` |
 
 ### Upstream API Endpoints
 
@@ -36,7 +36,7 @@ PR #38 (`pionex-official/pionex-ai-kit`) adds complete CLI + MCP support for Sma
 | POST | `/api/v1/bot/orders/smartCopy/create` | `create` |
 | POST | `/api/v1/bot/orders/smartCopy/cancel` | `cancel` |
 | POST | `/api/v1/bot/orders/smartCopy/checkParams` | `check_params` |
-| POST | `/api/v1/bot/signal/listener` | `add_listener` |
+| POST | `/api/v1/bot/signal/listener` | `listener` |
 
 ### Key Implementation Detail: `parseSmartCopyBuOrderData()`
 
@@ -57,13 +57,13 @@ This constraint should be reflected in the skill's safety rules so agents do not
 | Has `invest_in` | via `adjust_params` | standalone | ❌ |
 | Has `profit` | ❌ | ✅ | ❌ |
 | Extra create flag | none | none | `--copy-from <id>` |
-| Signal subscription | ❌ | ❌ | `bot signal add_listener` |
+| Signal subscription | ❌ | ❌ | `bot signal listener` |
 
 ## Conclusion
 
 The changes are additive to `pionex-bot/SKILL.md`:
 1. Add `bot smart_copy` section to the command table
-2. Add `bot signal add_listener` command
+2. Add `bot signal listener` command
 3. Add smart-copy-specific safety rules
 4. Add examples for the new commands
 5. Bump version to 0.5.0

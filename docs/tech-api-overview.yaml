@@ -212,7 +212,7 @@ x-cli-interface:
             Cancel and close smart copy bot. --convert-into-earn-coin converts holdings into
             Earn products instead of returning to spot account.
           mutating: true
-        - name: "bot signal add_listener"
+        - name: "bot signal listener"
           flags:
             - "--signal-type <uuid> (required)"
             - "--signal-param <json> (required)"

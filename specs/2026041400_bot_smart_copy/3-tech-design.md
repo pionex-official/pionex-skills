@@ -38,7 +38,7 @@ Append after `bot spot_grid profit`:
 | `pionex-trade-cli bot smart_copy check_params --base <BASE> --quote <QUOTE> --leverage <n> --quote-investment <amount> [--signal-type <uuid>] [--signal-param <json>]` | READ | Validate smart copy params. Use `--quote-investment 0` to get investment range only. On FailedWithData, surfaces constraints. |
 | `pionex-trade-cli bot smart_copy create --base <BASE> --quote <QUOTE> --bu-order-data-json '<json>' [--copy-from <id>] [--copy-type <type>] [--note <note>] [--dry-run]` | WRITE | Create a smart copy bot (portfolio model) |
 | `pionex-trade-cli bot smart_copy cancel --bu-order-id <id> [--close-note <note>] [--convert-into-earn-coin] [--dry-run]` | WRITE | Cancel and close smart copy bot |
-| `pionex-trade-cli bot signal add_listener --signal-type <uuid> --signal-param <json> --base <BASE> --quote <QUOTE> --time <iso> --price <price> --action <buy\|sell> --position-size <size> --contracts <n> [--direction <dir>] [--dry-run]` | WRITE | Push a trading signal to Pionex signal platform (signal provider role) |
+| `pionex-trade-cli bot signal listener --signal-type <uuid> --signal-param <json> --base <BASE> --quote <QUOTE> --time <iso> --price <price> --action <buy\|sell> --position-size <size> --contracts <n> [--direction <dir>] [--dry-run]` | WRITE | Push a trading signal to Pionex signal platform (signal provider role) |
 ```
 
 ### 4. Safety Rules
@@ -52,7 +52,7 @@ Add a new "Smart Copy Specific" subsection:
 10. Never infer `signal_type` UUIDs; require explicit user values.
 11. `--copy-from <id>` in `create` copies parameters from an existing smart copy order — use only when the user explicitly requests it.
 12. `--convert-into-earn-coin` in `cancel` converts holdings into Earn products — confirm with user before using.
-13. `bot signal add_listener` is for **pushing** trading signals to the Pionex signal platform as a signal provider — it is NOT a consumer subscription command.
+13. `bot signal listener` is for **pushing** trading signals to the Pionex signal platform as a signal provider — it is NOT a consumer subscription command.
 14. `check_params` takes flat flags (`--leverage`, `--quote-investment`), not `--bu-order-data-json`. Use `--quote-investment 0` to query the investment range without validating a specific amount.
 ```
 
@@ -106,7 +106,7 @@ pionex-trade-cli bot smart_copy cancel \
   --dry-run
 
 # Push a trading signal to the Pionex signal platform (signal provider role)
-pionex-trade-cli bot signal add_listener \
+pionex-trade-cli bot signal listener \
   --signal-type <uuid> \
   --signal-param '{}' \
   --base BTC \
@@ -162,7 +162,7 @@ Under `x-cli-interface.subcommands.bot.commands`, append after `bot spot_grid pr
   description: "Cancel and close smart copy bot. closeSellModel defaults to NOT_SELL."
   mutating: true
 
-- name: "bot signal add_listener"
+- name: "bot signal listener"
   flags:
     - "--signal-source-id <id>"
     - "--listen-mode <mode>"

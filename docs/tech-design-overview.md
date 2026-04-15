@@ -163,7 +163,7 @@ No `get_ai_strategy`, `reduce`, `invest_in`, or `profit` for smart copy.
 
 | Subcommand | Type | Notes |
 |---|---|---|
-| `add_listener` | WRITE | **Push** a trading signal to Pionex signal platform (signal **provider** role, not consumer). Required: `--signal-type`, `--signal-param`, `--base`, `--quote`, `--time` (RFC 3339), `--price`, `--action` (buy\|sell), `--position-size`, `--contracts`. |
+| `listener` | WRITE | **Push** a trading signal to Pionex signal platform (signal **provider** role, not consumer). Required: `--signal-type`, `--signal-param`, `--base`, `--quote`, `--time` (RFC 3339), `--price`, `--action` (buy\|sell), `--position-size`, `--contracts`. |
 
 `check_params` is READ-only — it calls the exchange's validation API without creating an order. If the response is `FailedWithData`, it carries `min_investment`, `max_investment`, and `slippage` fields. Agents must surface these to the user before retrying.
 

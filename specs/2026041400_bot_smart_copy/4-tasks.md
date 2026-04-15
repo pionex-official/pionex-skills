@@ -12,7 +12,7 @@
 Steps:
 1. Bump `metadata.version` from `"0.4.0"` to `"0.5.0"`
 2. Add `- Bot lifecycle (smart copy) -> **pionex-bot** (this skill)` to the Routing section
-3. Append 5 new rows to the Commands table (smart_copy get, check_params, create, cancel; signal add_listener)
+3. Append 5 new rows to the Commands table (smart_copy get, check_params, create, cancel; signal listener)
 4. Add "Smart Copy Specific" safety rules subsection (rules 5–8) after the existing "Spot Grid Specific" block
 5. Append a `# --- Smart Copy ---` examples block to the Examples section
 
@@ -31,18 +31,18 @@ Steps:
    - ✅ `bot smart_copy create` — Create a new smart copy bot order
    - ✅ `bot smart_copy check_params` — Validate parameters before create
    - ✅ `bot smart_copy cancel` — Cancel and close smart copy bot
-   - ✅ `bot signal add_listener` — Subscribe to a signal provider
+   - ✅ `bot signal listener` — Subscribe to a signal provider
    ```
 2. Update the "Last Updated" date to 2026-04-14 and iteration to `2026041400_bot_smart_copy`
 3. Append iteration history entry:
    ```
    ### 2026-04-14: Smart Copy Bot
    **Iteration Directory:** `specs/2026041400_bot_smart_copy/`
-   **Requirements:** Add `bot smart_copy` subcommands (get, create, check_params, cancel) and `bot signal add_listener` to `pionex-bot` skill
+   **Requirements:** Add `bot smart_copy` subcommands (get, create, check_params, cancel) and `bot signal listener` to `pionex-bot` skill
    **Source:** CLI implementation in `pionex-ai-kit` PR #38
    ```
 
-**Verification:** File contains "smart_copy" and "signal add_listener" entries.
+**Verification:** File contains "smart_copy" and "signal listener" entries.
 
 ---
 
@@ -66,7 +66,7 @@ Steps:
    `signal` is a peer subgroup to `smart_copy` under `bot`:
    | Subcommand | Type | Notes |
    |---|---|---|
-   | `add_listener` | WRITE | Subscribe to a signal provider by ID |
+   | `listener` | WRITE | Push trading signal to Pionex signal platform (signal provider role) |
 
    `leverageType` validation rule: `"fixed"` requires an explicit `leverage` value; `"follow"` must omit it.
    ```
@@ -86,12 +86,12 @@ Steps:
    ```markdown
    ## Iteration: 2026041400_bot_smart_copy (2026-04-14)
 
-   **Added:** `bot smart_copy` subcommands and `bot signal add_listener` to `skills/pionex-bot/SKILL.md`
+   **Added:** `bot smart_copy` subcommands and `bot signal listener` to `skills/pionex-bot/SKILL.md`
 
    ### Key Decisions
 
    **1. `signal` is a peer subgroup to `smart_copy`, not nested under it**
-   The CLI structure is `bot signal add_listener`, not `bot smart_copy signal add_listener`. The `signal` group is designed for future multi-bot signal support (other bot types may subscribe to signals later).
+   The CLI structure is `bot signal listener`, not `bot smart_copy signal listener`. The `signal` group is designed for future multi-bot signal support (other bot types may subscribe to signals later).
 
    **2. `leverageType="fixed"` requires explicit `leverage` — enforced in safety rules**
    The CLI's `parseSmartCopyBuOrderData()` rejects payloads where `leverageType="fixed"` but `leverage` is missing. The skill reflects this as safety rule 5 to prevent API rejections.
@@ -120,7 +120,7 @@ Steps:
    - `bot smart_copy check_params`
    - `bot smart_copy create`
    - `bot smart_copy cancel`
-   - `bot signal add_listener`
+   - `bot signal listener`
 
 **Verification:** YAML is valid (no parse errors); contains all 5 new command names.
 
@@ -132,5 +132,5 @@ Steps:
 1. Confirm `skills/pionex-bot/SKILL.md` version is `0.5.0`
 2. Confirm all 5 new commands appear in both `SKILL.md` command table and `tech-api-overview.yaml`
 3. Confirm safety rules include `leverageType="fixed"` requires `leverage`
-4. Confirm examples include at least: check_params, create (follow), create (fixed), get, cancel, signal add_listener, order_list with smart_copy filter
+4. Confirm examples include at least: check_params, create (follow), create (fixed), get, cancel, signal listener, order_list with smart_copy filter
 5. Confirm docs/ Last Updated dates are 2026-04-14

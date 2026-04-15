@@ -155,13 +155,13 @@ The yaml only contained `futures_grid` commands. During this iteration the full 
 
 ## Iteration: 2026041400_bot_smart_copy (2026-04-14)
 
-**Added:** `bot smart_copy` subcommands and `bot signal add_listener` to `skills/pionex-bot/SKILL.md`
+**Added:** `bot smart_copy` subcommands and `bot signal listener` to `skills/pionex-bot/SKILL.md`
 
 ### Key Decisions
 
 **1. `signal` is a peer subgroup to `smart_copy`, not nested under it**
 
-The CLI structure is `bot signal add_listener`, not `bot smart_copy signal add_listener`. The `signal` group is designed for future multi-bot signal support — other bot types may subscribe to signals later.
+The CLI structure is `bot signal listener`, not `bot smart_copy signal listener`. The `signal` group is designed for future multi-bot signal support — other bot types may subscribe to signals later.
 
 **2. `leverageType="fixed"` requires explicit `leverage` — enforced in safety rules**
 
@@ -189,4 +189,4 @@ Initial docs were based on an earlier version of the PR. After reviewing commit 
 
 **`smart_copy cancel` completely redesigned** — `--close-sell-model` removed. New flags: `--close-note` (string) and `--convert-into-earn-coin` (boolean, no value).
 
-**`bot signal add_listener` is provider-side, not consumer-side** — pushes a trading signal event to the Pionex signal platform. It is NOT a subscription command. Required fields: `--signal-type`, `--signal-param`, `--base`, `--quote`, `--time` (RFC 3339), `--price`, `--action`, `--position-size`, `--contracts`.
+**`bot signal listener` is provider-side, not consumer-side** — pushes a trading signal event to the Pionex signal platform. It is NOT a subscription command. Required fields: `--signal-type`, `--signal-param`, `--base`, `--quote`, `--time` (RFC 3339), `--price`, `--action`, `--position-size`, `--contracts`.

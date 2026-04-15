@@ -23,7 +23,7 @@ Add Smart Copy bot lifecycle commands and a Signal subscriber command to the `pi
 
 | Command | Type | Description |
 |---------|------|-------------|
-| `bot signal add_listener` | WRITE | Subscribe to a signal provider |
+| `bot signal listener` | WRITE | Subscribe to a signal provider |
 
 ### Changed: `pionex-bot` skill routing
 
@@ -47,7 +47,7 @@ Same enum as spot grid:
 - `TO_QUOTE` — convert all base to quote currency
 - `TO_USDT` — convert all assets to USDT
 
-## `bot signal add_listener` Parameters
+## `bot signal listener` Parameters
 
 - `--signal-source-id <id>` (required) — ID of the signal provider to subscribe to
 - `--listen-mode <mode>` (optional) — subscription mode (provider-specific values)
@@ -55,7 +55,7 @@ Same enum as spot grid:
 ## Acceptance Criteria
 
 1. `bot smart_copy get`, `create`, `check_params`, `cancel` are documented in the command table with exact flag syntax
-2. `bot signal add_listener` is documented with exact flag syntax
+2. `bot signal listener` is documented with exact flag syntax
 3. `buOrderData` JSON structure and field constraints are documented in an examples section
 4. Safety rules cover: confirm before write, `check_params` before `create`, no inference of `buOrderId` or signal source ID
 5. `leverageType="fixed"` requires explicit `leverage` value — enforced in safety rules

@@ -9,7 +9,7 @@ description: >
 license: MIT
 metadata:
   author: pionex
-  version: "0.5.0"
+  version: "1.0.0"
   agent:
     requires:
       bins: ["pionex-trade-cli"]

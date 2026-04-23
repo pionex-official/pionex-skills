@@ -63,7 +63,7 @@ Use this skill for Pionex bot lifecycle actions: Futures Grid (get, create, adju
 ## Safety Rules
 
 1. Confirm write intent for create/adjust/reduce/cancel before running without `--dry-run`.
-2. Call `check_params` before `create` to validate parameters. If the response is `FailedWithData`, surface the returned `min_investment`, `max_investment`, and `slippage` values to the user before retrying.
+2. Call `check_params` before `create` to validate parameters. If the response is `FailedWithData`, surface the returned `min_investment`, `max_investment`, and `slippage` values to the user before retrying. Note: when `extraMargin=true` (auto-split mode), `min_investment`/`max_investment` represent the **total input range** (trading capital + safety buffer); when `extraMargin=false` (manual mode), they represent **trading capital only**. Always tell the user which interpretation applies.
 3. Never infer `buOrderId`, leverage, range, or amount; require explicit user values.
 4. If API rejects params, surface exact error and propose a corrected payload.
 
@@ -108,16 +108,25 @@ pionex-trade-cli bot order_list --status finished --page-token <nextPageToken>
 pionex-trade-cli bot futures_grid get --bu-order-id 123456789
 
 # Validate futures grid params before creating
+# extraMargin=false (manual mode): quoteInvestment is trading capital only;
+#   min_investment/max_investment represent trading capital range.
 pionex-trade-cli bot futures_grid check_params \
   --base BTC \
   --quote USDT \
-  --bu-order-data-json '{"top":"110000","bottom":"90000","row":100,"grid_type":"arithmetic","trend":"long","leverage":5,"extraMargin":"0","quoteInvestment":"100"}'
+  --bu-order-data-json '{"top":"110000","bottom":"90000","row":100,"grid_type":"arithmetic","trend":"long","leverage":5,"extraMargin":false,"quoteInvestment":"100"}'
+
+# extraMargin=true (auto-split mode): quoteInvestment is total input (trading capital + safety buffer);
+#   min_investment/max_investment represent total input range. System splits automatically.
+pionex-trade-cli bot futures_grid check_params \
+  --base BTC \
+  --quote USDT \
+  --bu-order-data-json '{"top":"110000","bottom":"90000","row":100,"grid_type":"arithmetic","trend":"long","leverage":5,"extraMargin":true,"quoteInvestment":"100"}'
 
 # Dry-run create
 pionex-trade-cli bot futures_grid create \
   --base BTC \
   --quote USDT \
-  --bu-order-data-json '{"top":"110000","bottom":"90000","row":100,"grid_type":"arithmetic","trend":"long","leverage":5,"extraMargin":"0","quoteInvestment":"100"}' \
+  --bu-order-data-json '{"top":"110000","bottom":"90000","row":100,"grid_type":"arithmetic","trend":"long","leverage":5,"extraMargin":false,"quoteInvestment":"100"}' \
   --dry-run
 
 # Dry-run adjust

@@ -47,6 +47,16 @@ x-cli-interface:
         - name: "account balance"
           description: "All spot balances. Returns JSON array; filter by currency client-side."
 
+    wallet:
+      auth_required: true
+      commands:
+        - name: "wallet balance_full"
+          flags: ["--app-lang <lang>  # en or zh, optional"]
+          description: >
+            Full portfolio overview. Returns totalInUsdt/totalInBtc grand totals plus
+            botAccount.detail[] breakdown by type (futures_lite, spot, dual_manual,
+            pionex_card), traderAccount, extractBalances, and live coin prices.
+
     orders:
       auth_required: true
       commands:

@@ -4,7 +4,7 @@ This document summarizes the requirement history and current status of the Pione
 
 ## Last Updated
 
-**Date:** 2026-04-14 (updated by iteration `2026041400_bot_smart_copy`)
+**Date:** 2026-05-08 (updated by iteration `2026050800_wallet_balance_full`)
 
 ## Current Status
 
@@ -26,6 +26,12 @@ This document summarizes the requirement history and current status of the Pione
 **Scope:** Spot account balance queries — requires API credentials
 
 - ✅ `account balance` — All spot balances
+
+#### Skill: pionex-wallet
+**Status:** Completed  
+**Scope:** Full portfolio overview (all account types) — requires API credentials
+
+- ✅ `wallet balance_full` — Grand total in USDT/BTC + per-type breakdown (futures lite bots, spot balances, dual investment, Pionex Card, trader account)
 
 #### Skill: pionex-trade
 **Status:** Completed  
@@ -102,6 +108,11 @@ Each skill must:
 4. Include `--dry-run` instructions for destructive commands
 
 ## Iteration History
+
+### 2026-05-08: Wallet Balance Full
+**Iteration Directory:** `specs/2026050800_wallet_balance_full/`
+**Requirements:** Add new `pionex-wallet` skill wrapping `wallet balance_full` — full portfolio overview with USDT/BTC grand total and per-account-type breakdown (spot, futures lite bots, dual investment, Pionex Card, trader account)
+**Source:** CLI implementation in `pionex-ai-kit` issue #31
 
 ### 2026-04-14: Smart Copy Bot
 **Iteration Directory:** `specs/2026041400_bot_smart_copy/`

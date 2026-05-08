@@ -4,7 +4,7 @@ This document records key decisions, lessons learned, and non-obvious technical 
 
 ## Last Updated
 
-**Date:** 2026-04-14
+**Date:** 2026-05-08
 
 ---
 
@@ -190,3 +190,27 @@ Initial docs were based on an earlier version of the PR. After reviewing commit 
 **`smart_copy cancel` completely redesigned** — `--close-sell-model` removed. New flags: `--close-note` (string) and `--convert-into-earn-coin` (boolean, no value).
 
 **`bot signal listener` is provider-side, not consumer-side** — pushes a trading signal event to the Pionex signal platform. It is NOT a subscription command. Required fields: `--signal-type`, `--signal-param`, `--base`, `--quote`, `--time` (RFC 3339), `--price`, `--action`, `--position-size`, `--contracts`.
+
+---
+
+## Iteration: 2026050800_wallet_balance_full (2026-05-08)
+
+**Added:** `skills/pionex-wallet/SKILL.md` — new skill for full portfolio overview
+
+### Key Decisions
+
+**1. New skill `pionex-wallet` instead of extending `pionex-portfolio`**
+
+`pionex-portfolio` wraps `account balance` (raw per-coin spot list). `wallet balance_full` returns a cross-account aggregated view with USDT/BTC totals — a fundamentally different output shape and user intent. Merging them would blur the routing boundary and cause the skill router to misfire on "how much USDT do I have?" vs "what's my total portfolio?".
+
+**2. `botAccount.detail[].type` values are stable enum-like strings**
+
+As of 2026-05-08, observed types: `futures_lite`, `spot`, `dual_manual`, `pionex_card`. The skill documents these in the output guide without asserting exhaustiveness — new types may appear as Pionex adds products.
+
+**3. `--app-lang` flag is optional and cosmetic**
+
+It only affects `title` display strings (e.g. "Futures Lite" vs Chinese equivalent). It does not change numeric fields or JSON structure. The skill documents it but does not require the agent to set it.
+
+**4. No `--dry-run` needed — read-only command**
+
+`wallet balance_full` is a GET operation with no side effects. Safety constraints only apply to write commands.

@@ -15,7 +15,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```
 skills/
   pionex-market/    → Public market data (no auth required)
-  pionex-portfolio/ → Account balance queries
+  pionex-portfolio/ → Account balance queries (spot coin list)
+  pionex-wallet/    → Full portfolio overview (spot + bots + dual investment, USDT/BTC total)
   pionex-trade/     → Spot order placement, cancellation, fills
   pionex-bot/       → Futures Grid Bot lifecycle (create/adjust/reduce/cancel)
 ```
@@ -52,7 +53,8 @@ metadata:
 | Skill | Scope | Auth |
 |-------|-------|------|
 | `pionex-market` | Market data: depth, tickers, symbols, klines, trades | No |
-| `pionex-portfolio` | Account balance (spot) | Yes |
+| `pionex-portfolio` | Account balance (spot coin list) | Yes |
+| `pionex-wallet` | Full portfolio overview: USDT/BTC total across all account types | Yes |
 | `pionex-trade` | Spot orders: place, cancel, open orders, fills | Yes |
 | `pionex-bot` | Futures Grid Bot lifecycle: get/create/adjust/reduce/cancel | Yes |
 

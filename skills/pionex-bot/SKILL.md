@@ -2,14 +2,15 @@
 name: pionex-bot
 description: >
   Use when the user asks to create, query, list, adjust, reduce, or cancel Pionex
-  bot orders (Futures Grid, Spot Grid, Smart Copy). Includes listing/paginating
-  through bot orders in bulk. Requires API credentials and bot permissions.
+  bot orders (Futures Grid, Spot Grid, Smart Copy), or to manage user-defined
+  signals (list, get, create, edit, delete). Includes listing/paginating through
+  bot orders in bulk. Requires API credentials and bot permissions.
   Do NOT use for market data only (pionex-market), balance only (pionex-portfolio),
   or spot order placement/cancel (pionex-trade).
 license: MIT
 metadata:
   author: pionex
-  version: "1.0.0"
+  version: "1.1.0"
   agent:
     requires:
       bins: ["pionex-trade-cli"]
@@ -23,13 +24,14 @@ metadata:
 
 # Pionex Bot Skill
 
-Use this skill for Pionex bot lifecycle actions: Futures Grid (get, create, adjust, reduce, cancel), Spot Grid (get, get_ai_strategy, create, adjust_params, invest_in, cancel, profit), and Smart Copy (get, create, check_params, cancel). Also handles pushing trading signals to the Pionex signal platform.
+Use this skill for Pionex bot lifecycle actions: Futures Grid (get, create, adjust, reduce, cancel), Spot Grid (get, get_ai_strategy, create, adjust_params, invest_in, cancel, profit), Smart Copy (get, create, check_params, cancel), and User-defined Signal CRUD (list, get, create, edit, delete). Also handles pushing trading signals to the Pionex signal platform.
 
 ## Routing
 
 - Bot lifecycle (futures grid) -> **pionex-bot** (this skill)
 - Bot lifecycle (spot grid) -> **pionex-bot** (this skill)
 - Bot lifecycle (smart copy) -> **pionex-bot** (this skill)
+- User-defined signal management (list/get/create/edit/delete) -> **pionex-bot** (this skill)
 - Push trading signal to signal platform (signal provider role) -> **pionex-bot** (this skill)
 - Market data -> **pionex-market**
 - Spot balance -> **pionex-portfolio**
@@ -59,6 +61,11 @@ Use this skill for Pionex bot lifecycle actions: Futures Grid (get, create, adju
 | `pionex-trade-cli bot smart_copy create --base <BASE> --quote <QUOTE> --bu-order-data-json '<json>' [--copy-from <id>] [--copy-type <type>] [--note <note>] [--dry-run]` | WRITE | Create a smart copy bot (portfolio model) |
 | `pionex-trade-cli bot smart_copy cancel --bu-order-id <id> [--close-note <note>] [--convert-into-earn-coin] [--dry-run]` | WRITE | Cancel and close smart copy bot |
 | `pionex-trade-cli bot signal listener --signal-type <uuid> --signal-param <json> --base <BASE> --quote <QUOTE> --time <iso> --price <price> --action <buy\|sell> --position-size <size> --contracts <n> [--direction <dir>] [--dry-run]` | WRITE | Push a trading signal to Pionex signal platform (signal provider role) |
+| `pionex-trade-cli bot signal user_signal_list [--page-token <token>]` | READ | List user-defined signals (paginated) |
+| `pionex-trade-cli bot signal user_signal_get --signal-type <uuid>` | READ | Get detail of a user-defined signal (webhookUrl, TradingView template) |
+| `pionex-trade-cli bot signal user_signal_create --title <title> [--description <desc>] [--dry-run]` | WRITE | Create a new user-defined signal (max 100 per user) |
+| `pionex-trade-cli bot signal user_signal_edit --signal-type <uuid> --title <title> \| --description <desc> [--dry-run]` | WRITE | Edit title or description of a user-defined signal |
+| `pionex-trade-cli bot signal user_signal_delete --signal-type <uuid> [--dry-run]` | WRITE | Delete a user-defined signal (fails if unclosed orders exist) |
 
 ## Safety Rules
 
@@ -86,6 +93,9 @@ Use this skill for Pionex bot lifecycle actions: Futures Grid (get, create, adju
 
 14. `bot signal listener` **pushes** a trading signal to the Pionex signal platform as a signal provider — it is NOT a consumer subscription command.
 15. All flags are required: `--signal-type`, `--signal-param`, `--base`, `--quote`, `--time` (RFC 3339), `--price`, `--action`, `--position-size`, `--contracts`. Never omit or infer any of them.
+16. `user_signal_create/edit/delete` are write operations — confirm intent before running without `--dry-run`.
+17. `user_signal_delete` will fail with `SIGNAL_HAS_UNCLOSED_ORDERS` if the signal has active orders. Surface the `cnt` value (number of open orders) to the user before retrying.
+18. For `user_signal_edit`, at least one of `--title` or `--description` must be provided.
 
 ## Examples
 
@@ -228,4 +238,29 @@ pionex-trade-cli bot signal listener \
 
 # List running smart copy bots
 pionex-trade-cli bot order_list --status running --bu-order-types smart_copy
+
+# --- User-defined Signal CRUD ---
+
+# List all user-defined signals
+pionex-trade-cli bot signal user_signal_list
+
+# Get detail of a signal (includes webhookUrl and TradingView message template)
+pionex-trade-cli bot signal user_signal_get --signal-type <uuid>
+
+# Dry-run create a new signal
+pionex-trade-cli bot signal user_signal_create \
+  --title "My TradingView Signal" \
+  --description "RSI crossover strategy" \
+  --dry-run
+
+# Dry-run edit signal title
+pionex-trade-cli bot signal user_signal_edit \
+  --signal-type <uuid> \
+  --title "Updated Signal Name" \
+  --dry-run
+
+# Dry-run delete a signal (fails if unclosed orders exist)
+pionex-trade-cli bot signal user_signal_delete \
+  --signal-type <uuid> \
+  --dry-run
 ```

@@ -32,6 +32,7 @@ are enforced for order placement, balance checks, and minimum order sizes.
 | [pionex-trade](skills/pionex-trade/SKILL.md) | Spot orders: place, cancel, open orders, fills | Yes |
 | [pionex-bot](skills/pionex-bot/SKILL.md) | Futures Grid, Spot Grid & Smart Copy Bot lifecycle: get/create/check_params/adjust/reduce/cancel; Spot Grid also supports get_ai_strategy, invest_in, profit; Signal provider subscription via `bot signal listener`; User-defined signal CRUD (list/get/create/edit/delete) | Yes |
 | [pionex-earn-dual](skills/pionex-earn-dual/SKILL.md) | Dual Investment: products, prices, invest, revoke, collect | No (public) / Yes (private) |
+| [pionex-earn-arbitrage](skills/pionex-earn-arbitrage/SKILL.md) | Earn Arbitrage (InstFund): fetch products, query balances, stake, unstake | Yes (Earn) |
 
 All skills assume the `pionex-trade-cli` CLI is installed (`npm install -g @pionex/pionex-ai-kit`).  
 Pionex API overview: [Pionex API Docs](https://pionex-doc.gitbook.io/apidocs/) — use IP whitelisting and never share your API Key/Secret.

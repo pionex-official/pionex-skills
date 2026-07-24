@@ -34,6 +34,7 @@ Dual Investment products on Pionex: browse products, check yields, invest, revok
 ## Skill Routing
 
 - Dual Investment products, prices, invest, revoke, collect → **pionex-earn-dual** (this skill)
+- Arbitrage (InstFund) products, stake, unstake → **pionex-earn-arbitrage**
 - Spot market data (depth, tickers, klines) → **pionex-market**
 - Spot account balance → **pionex-portfolio**
 - Spot order placement/cancellation → **pionex-trade**
